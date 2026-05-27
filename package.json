@@ -1,0 +1,14 @@
+{
+  "name": "zhuanz-personal-website",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "个人专业网站 — 算电协同 · 电力交易 · 新能源",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "^5.0.0"
+  }
+}

@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="PPT 布局质量迭代：从 57 个问题到零缺陷" description="用 python-pptx 自动生成投资报告 PPT 的过程中遇到的布局溢出、重叠问题及其系统化修复方法。">
+  <a href="/blog" class="back-link">← 返回文章列表</a>
+
+  <h1>PPT 布局质量迭代：从 57 个问题到零缺陷</h1>
+  <div class="article-meta">
+    <span>2026-05</span>
+    <span>· 约 5 分钟阅读</span>
+  </div>
+  <div class="tags">
+    <span class="tag">AI 协作</span>
+    <span class="tag">PPT</span>
+    <span class="tag">效率工具</span>
+  </div>
+
+  <p>在生成一份 10 页的算电协同投资报告 PPT 时，第一版发现了 57 个布局问题——主要是文本溢出和元素重叠。经过三轮迭代，全部清零。</p>
+
+  <p>这篇文章记录根因分析和修复方法，供后续自动化生成参考。</p>
+
+  <h2>典型问题根因</h2>
+
+  <table>
+    <tr>
+      <th>问题</th>
+      <th>根因</th>
+      <th>修复方式</th>
+    </tr>
+    <tr>
+      <td>Card item 垂直溢出</td>
+      <td>文字框高度硬编码 0.5"，单行 12pt 只需 0.17"</td>
+      <td>改为 0.35"</td>
+    </tr>
+    <tr>
+      <td>4-card 右边缘溢出</td>
+      <td>硬编码 if/elif 宽度，4 张时计算不准</td>
+      <td>动态计算：_calc_grid(n, SW)</td>
+    </tr>
+    <tr>
+      <td>Timeline 标签重叠</td>
+      <td>date+title+desc 同侧同 offset 堆叠</td>
+      <td>奇偶交错：even 在上、odd 在下</td>
+    </tr>
+    <tr>
+      <td>页码被 bottom bar 覆盖</td>
+      <td>底部文字框 12.0" 过宽</td>
+      <td>改为 11.0"</td>
+    </tr>
+    <tr>
+      <td>多方向多子项溢出</td>
+      <td>vertical bullet 布局容量不够</td>
+      <td>改用 2×2 flex_cards</td>
+    </tr>
+  </table>
+
+  <h2>系统化修复原则</h2>
+  <ol>
+    <li><strong>抽象计算逻辑</strong>：将宽度、高度、间距的计算从硬编码抽离为函数，消除单点 bug</li>
+    <li><strong>统一间距系统</strong>：使用 SPACING 常量字典，不再各处散落 magic number</li>
+    <li><strong>方向感知布局</strong>：不同 slide layout 方向（竖向/横向）分别处理，不共用同一套偏移逻辑</li>
+    <li><strong>对折线处理</strong>：文字换行后行数增加→高度随之增加，而非固定高度截断</li>
+  </ol>
+
+  <h2>自动化工具化</h2>
+  <p>这些经验被封装为一个独立的 PPT 质量审查工具（python-pptx 实现），每次生成后自动检查：</p>
+  <ul>
+    <li>文本是否溢出容器</li>
+    <li>元素是否相互重叠</li>
+    <li>对齐是否一致</li>
+    <li>间距是否在合理范围内</li>
+  </ul>
+  <p>从此，每次生成的 PPT 不再需要人工逐页检查布局问题。</p>
+</BaseLayout>

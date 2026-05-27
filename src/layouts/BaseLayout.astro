@@ -1,0 +1,469 @@
+---
+export interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+const currentPath = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description || '个人专业网站 — 算电协同 · 电力交易 · 新能源'} />
+    <title>{title} | 陈道雷</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <style>
+      /* === CSS Custom Properties === */
+      :root {
+        --color-bg: #f8f9fc;
+        --color-bg-card: #ffffff;
+        --color-text: #1a1a2e;
+        --color-text-secondary: #4a4a5a;
+        --color-text-muted: #8888a0;
+        --color-accent: #0d9488;
+        --color-accent-light: #14b8a6;
+        --color-accent-bg: #f0fdfa;
+        --color-border: #e8e8ee;
+        --color-border-light: #f0f0f4;
+        --color-nav-bg: rgba(248, 249, 252, 0.92);
+        --color-hover: #0f766e;
+        --max-width-content: 720px;
+        --max-width-wide: 800px;
+        --shadow-card: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
+        --shadow-card-hover: 0 4px 12px rgba(0,0,0,0.06), 0 2px 4px rgba(0,0,0,0.04);
+        --radius-card: 12px;
+        --radius-sm: 6px;
+      }
+
+      /* === Reset & Base === */
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      html { font-size: 18px; scroll-behavior: smooth; }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+        color: var(--color-text);
+        background: var(--color-bg);
+        line-height: 1.7;
+        -webkit-font-smoothing: antialiased;
+        background-image: radial-gradient(ellipse at 50% 0%, #eef2ff 0%, transparent 60%);
+        background-attachment: fixed;
+        min-height: 100vh;
+      }
+
+      /* === Reading Progress Bar === */
+      #reading-progress {
+        position: fixed; top: 0; left: 0; height: 3px;
+        background: linear-gradient(90deg, var(--color-accent), var(--color-accent-light));
+        z-index: 200;
+        width: 0%;
+        transition: width 0.05s linear;
+        pointer-events: none;
+      }
+
+      /* === Navigation === */
+      nav {
+        position: sticky; top: 0; z-index: 100;
+        background: var(--color-nav-bg);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--color-border);
+      }
+      nav .inner {
+        max-width: var(--max-width-wide); margin: 0 auto;
+        display: flex; align-items: center; gap: 2rem;
+        padding: 0 1.5rem; height: 56px;
+      }
+      nav .logo {
+        font-weight: 750; font-size: 1.1rem;
+        color: var(--color-text); text-decoration: none;
+        letter-spacing: -0.02em;
+        transition: opacity 0.2s;
+      }
+      nav .logo:hover { opacity: 0.7; }
+      nav .links { display: flex; gap: 1.5rem; margin-left: auto; align-items: center; }
+      nav .links a {
+        text-decoration: none; color: var(--color-text-muted);
+        font-size: 0.9rem; font-weight: 500;
+        position: relative; padding: 0.25rem 0;
+        transition: color 0.2s;
+      }
+      nav .links a:hover { color: var(--color-accent); }
+      nav .links a.active {
+        color: var(--color-accent);
+      }
+      nav .links a.active::after {
+        content: '';
+        position: absolute; bottom: -2px; left: 0; right: 0;
+        height: 2px; background: var(--color-accent);
+        border-radius: 1px;
+      }
+
+      /* === Main Content === */
+      main {
+        max-width: var(--max-width-content); margin: 0 auto;
+        padding: 3rem 1.5rem 5rem;
+      }
+
+      /* === Typography === */
+      h1 { font-size: 2.2rem; font-weight: 750; line-height: 1.25; letter-spacing: -0.03em; margin-bottom: 0.5rem; }
+      h2 { font-size: 1.5rem; font-weight: 650; line-height: 1.3; margin-top: 2.5rem; margin-bottom: 0.75rem; color: var(--color-text); }
+      h3 { font-size: 1.15rem; font-weight: 600; margin-top: 1.75rem; margin-bottom: 0.5rem; color: var(--color-text); }
+      h2 a.anchor, h3 a.anchor {
+        text-decoration: none; color: var(--color-accent);
+        opacity: 0; transition: opacity 0.15s;
+        font-weight: 400; margin-left: 0.25rem;
+      }
+      h2:hover a.anchor, h3:hover a.anchor { opacity: 1; }
+      p { margin-bottom: 1.2rem; }
+      p, li { color: var(--color-text-secondary); }
+
+      a { color: var(--color-accent); text-decoration: none; transition: color 0.15s; }
+      a:hover { color: var(--color-hover); text-decoration: underline; }
+
+      ul, ol { padding-left: 1.25rem; margin-bottom: 1.2rem; }
+      li { margin-bottom: 0.3rem; }
+
+      blockquote {
+        border-left: 3px solid var(--color-accent);
+        padding: 0.75rem 1rem;
+        margin: 1.5rem 0;
+        background: var(--color-accent-bg);
+        border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        color: var(--color-text-secondary);
+        font-style: normal;
+      }
+      blockquote p { margin-bottom: 0; }
+
+      hr {
+        border: none; border-top: 1px solid var(--color-border);
+        margin: 2.5rem 0;
+      }
+
+      /* === Code === */
+      code {
+        font-family: "SF Mono", "Fira Code", "JetBrains Mono", monospace;
+        font-size: 0.85rem;
+        background: #f0f0f0;
+        padding: 0.15em 0.4em;
+        border-radius: 4px;
+      }
+      pre {
+        background: #1a1a2e; color: #e0e0e0;
+        padding: 1rem 1.25rem; border-radius: 8px;
+        overflow-x: auto; margin: 1.5rem 0;
+        font-size: 0.82rem;
+        line-height: 1.5;
+        position: relative;
+      }
+      pre code {
+        background: none; padding: 0; color: inherit;
+        font-size: inherit;
+      }
+
+      /* === Tables === */
+      table {
+        width: 100%; border-collapse: collapse;
+        margin: 1.5rem 0; font-size: 0.9rem;
+      }
+      th, td {
+        border: 1px solid var(--color-border);
+        padding: 0.5rem 0.75rem; text-align: left;
+      }
+      th { background: #f5f5f7; font-weight: 600; color: var(--color-text); }
+      tr:nth-child(even) { background: #fafafc; }
+
+      /* === Article Meta === */
+      .article-meta {
+        font-size: 0.85rem; color: var(--color-text-muted);
+        margin-bottom: 2rem;
+        display: flex; gap: 1rem; flex-wrap: wrap;
+      }
+      .article-meta span { display: inline-flex; align-items: center; gap: 0.3rem; }
+
+      /* === Tags === */
+      .tags { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+      .tag {
+        background: var(--color-accent-bg); color: var(--color-accent);
+        padding: 0.15rem 0.7rem; border-radius: 12px;
+        font-size: 0.78rem; font-weight: 500;
+        border: 1px solid color-mix(in srgb, var(--color-accent) 20%, transparent);
+      }
+
+      /* === Back link === */
+      .back-link {
+        display: inline-flex; align-items: center; gap: 0.3rem;
+        font-size: 0.9rem; color: var(--color-text-muted); margin-bottom: 2rem;
+      }
+      .back-link:hover { color: var(--color-accent); text-decoration: none; }
+
+      /* === Footer === */
+      footer {
+        border-top: 1px solid var(--color-border);
+        padding: 2rem 1.5rem;
+        text-align: center;
+        color: var(--color-text-muted); font-size: 0.82rem;
+      }
+      footer a { color: var(--color-text-muted); }
+      footer a:hover { color: var(--color-accent); }
+
+      /* === Responsive === */
+      @media (max-width: 640px) {
+        html { font-size: 16px; }
+        main { padding: 2rem 1.25rem 4rem; }
+        h1 { font-size: 1.8rem; }
+        h2 { font-size: 1.3rem; }
+        nav .inner { padding: 0 1rem; }
+        nav .links { gap: 1rem; }
+        .article-card-grid { grid-template-columns: 1fr; }
+      }
+
+      /* === Homepage Hero === */
+      .hero {
+        margin-bottom: 3rem;
+        position: relative;
+      }
+      .hero-bg-decor {
+        position: absolute;
+        top: -40px; right: -40px;
+        width: 260px; height: 260px;
+        pointer-events: none;
+        opacity: 0.12;
+        z-index: 0;
+      }
+      .hero-bg-decor svg { width: 100%; height: 100%; }
+      .hero-content { position: relative; z-index: 1; }
+      .hero h1 { font-size: 2.5rem; margin-bottom: 0.75rem; }
+      .hero .subtitle {
+        font-size: 1.1rem; color: var(--color-text-secondary);
+        line-height: 1.6; margin-bottom: 1.5rem;
+        max-width: 580px;
+      }
+      .hero .subtitle strong { color: var(--color-text); }
+      .hero .cta {
+        display: inline-flex; align-items: center; gap: 0.5rem;
+        background: var(--color-text); color: #fff;
+        padding: 0.6rem 1.5rem; border-radius: 8px;
+        font-size: 0.9rem; font-weight: 600;
+        text-decoration: none; transition: all 0.2s;
+      }
+      .hero .cta:hover { background: var(--color-accent); text-decoration: none; transform: translateY(-1px); }
+
+      /* === Article Cards === */
+      .article-card-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        list-style: none;
+        padding: 0;
+      }
+      .article-card {
+        background: var(--color-bg-card);
+        border: 1px solid var(--color-border-light);
+        border-radius: var(--radius-card);
+        padding: 1.5rem;
+        transition: all 0.25s ease;
+        box-shadow: var(--shadow-card);
+      }
+      .article-card:hover {
+        box-shadow: var(--shadow-card-hover);
+        transform: translateY(-2px);
+        border-color: var(--color-border);
+      }
+      .article-card .card-tag {
+        display: inline-block;
+        font-size: 0.72rem; font-weight: 600;
+        color: var(--color-accent);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        margin-bottom: 0.5rem;
+      }
+      .article-card a.card-title {
+        display: block;
+        font-size: 1.05rem; font-weight: 650;
+        color: var(--color-text);
+        text-decoration: none;
+        line-height: 1.4;
+        margin-bottom: 0.4rem;
+        transition: color 0.15s;
+      }
+      .article-card a.card-title:hover { color: var(--color-accent); }
+      .article-card .card-desc {
+        font-size: 0.85rem; color: var(--color-text-muted);
+        line-height: 1.5;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      .article-card .card-meta {
+        font-size: 0.75rem; color: var(--color-text-muted);
+        margin-top: 0.6rem;
+      }
+      /* Card column span for featured first card */
+      .article-card.featured {
+        grid-column: 1 / -1;
+      }
+      .article-card.featured a.card-title { font-size: 1.2rem; }
+
+      /* === Article List Plain (for blog listing) === */
+      .article-list { list-style: none; padding: 0; }
+      .article-list li {
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--color-border-light);
+      }
+      .article-list li:last-child { border-bottom: none; }
+      .article-list a {
+        font-size: 1.05rem; font-weight: 600; color: var(--color-text);
+        text-decoration: none; transition: color 0.15s;
+      }
+      .article-list a:hover { color: var(--color-accent); }
+      .article-list .desc {
+        font-size: 0.88rem; color: var(--color-text-muted);
+        margin-top: 0.25rem; line-height: 1.5;
+      }
+      .article-list .meta {
+        font-size: 0.78rem; color: var(--color-text-muted);
+        margin-top: 0.3rem;
+      }
+
+      /* === Category Heading === */
+      .category-heading {
+        font-size: 1rem; font-weight: 650;
+        color: var(--color-accent);
+        margin-top: 2rem; margin-bottom: 0.75rem;
+        display: flex; align-items: center; gap: 0.5rem;
+      }
+      .category-heading::after {
+        content: '';
+        flex: 1; height: 1px;
+        background: linear-gradient(90deg, var(--color-accent), transparent);
+        opacity: 0.3;
+      }
+
+      /* === Inline TOC === */
+      .article-toc {
+        margin: 1.5rem 0 2rem;
+        padding: 1rem 1.25rem;
+        background: #f5f5f8;
+        border-radius: var(--radius-sm);
+        font-size: 0.85rem;
+      }
+      .article-toc .toc-label {
+        font-weight: 600; color: var(--color-text);
+        margin-bottom: 0.5rem;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .article-toc a {
+        display: block;
+        color: var(--color-text-muted);
+        padding: 0.2rem 0;
+        text-decoration: none;
+        transition: color 0.15s;
+      }
+      .article-toc a:hover { color: var(--color-accent); }
+      .article-toc a.toc-h2 { padding-left: 0; }
+      .article-toc a.toc-h3 { padding-left: 1rem; font-size: 0.82rem; }
+    </style>
+  </head>
+  <body>
+    {currentPath.startsWith('/blog/') && <div id="reading-progress"></div>}
+    <nav>
+      <div class="inner">
+        <a href="/" class="logo">陈道雷</a>
+        <div class="links">
+          <a href="/" class={currentPath === '/' ? 'active' : ''}>首页</a>
+          <a href="/about" class={currentPath === '/about' ? 'active' : ''}>关于</a>
+          <a href="/blog" class={currentPath.startsWith('/blog') ? 'active' : ''}>文章</a>
+          <a href="/projects" class={currentPath === '/projects' ? 'active' : ''}>作品</a>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer>
+      <p>© {new Date().getFullYear()} 陈道雷 · 用 ❤ 和 ⚡ 构建</p>
+      <p style="margin-top: 0.3rem;">
+        <a href="https://github.com/DigitalPlatDev/FreeDomain" target="_blank" rel="noopener">FreeDomain</a>
+        · <a href="https://cloudflare.com" target="_blank" rel="noopener">Cloudflare Pages</a>
+        · <a href="https://astro.build" target="_blank" rel="noopener">Astro</a>
+      </p>
+    </footer>
+  {currentPath.startsWith('/blog/') && (
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Reading progress bar
+        var bar = document.getElementById('reading-progress');
+        if (bar) {
+          var winHeight = window.innerHeight;
+          var docHeight = document.documentElement.scrollHeight;
+          var maxScroll = docHeight - winHeight;
+          function updateBar() {
+            var scrolled = window.scrollY;
+            var pct = maxScroll > 0 ? (scrolled / maxScroll) * 100 : 0;
+            bar.style.width = pct + '%';
+          }
+          window.addEventListener('scroll', updateBar, { passive: true });
+          updateBar();
+        }
+
+        // Auto-generate TOC anchor links for h2/h3
+        var headings = document.querySelectorAll('h2, h3');
+        headings.forEach(function(h) {
+          if (!h.id) {
+            h.id = h.textContent.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9\u4e00-\u9fff-]/g, '');
+          }
+          var anchor = document.createElement('a');
+          anchor.href = '#' + h.id;
+          anchor.className = 'anchor';
+          anchor.textContent = '#';
+          h.appendChild(anchor);
+        });
+
+        // Build inline TOC from h2/h3
+        var h2s = document.querySelectorAll('h2');
+        if (h2s.length >= 2) {
+          var tocDiv = document.createElement('div');
+          tocDiv.className = 'article-toc';
+          var tocLabel = document.createElement('div');
+          tocLabel.className = 'toc-label';
+          tocLabel.textContent = '目录';
+          tocDiv.appendChild(tocLabel);
+
+          var main = document.querySelector('main');
+          var firstH2 = h2s[0];
+
+          var tocItems = [];
+          h2s.forEach(function(h2) {
+            tocItems.push({ el: h2, tag: 'h2' });
+            var next = h2.nextElementSibling;
+            while (next && next.tagName !== 'H2') {
+              if (next.tagName === 'H3') {
+                tocItems.push({ el: next, tag: 'h3' });
+              }
+              next = next.nextElementSibling;
+            }
+          });
+
+          tocItems.forEach(function(item) {
+            var link = document.createElement('a');
+            link.href = '#' + item.el.id;
+            link.className = 'toc-' + item.tag;
+            link.textContent = item.el.textContent.replace(/#$/, '').trim();
+            tocDiv.appendChild(link);
+          });
+
+          main.insertBefore(tocDiv, firstH2);
+        }
+      });
+    </script>
+  )}
+  </body>
+</html>
