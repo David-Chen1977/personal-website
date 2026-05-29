@@ -3,177 +3,228 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ArticleCard from '../components/ArticleCard.astro';
 
 const articles = [
+  { slug: 'huihong-ppt-dev-journey', title: 'HUIIHONG PPT 模版开发：从AI协作到可复用技能的全记录', desc: '十轮迭代从测量模版到 Pillow 自绘图标，最终封装为 OpenCode 可复用技能的完整过程。', date: '2026-05-29', readTime: '约 10 分钟阅读', tag: 'AI 协作' },
   { slug: 'suan-dian-xie-tong-AI', title: '算电协同：AI 下半场，电比芯片更稀缺', desc: '算力遇到电力瓶颈，中美两套体制给出完全不同的应对逻辑。三层投资优先级和六个商业模式拆解。', date: '2026-05-28', readTime: '约 10 分钟阅读', tag: '算电协同' },
-  { slug: 'liu-zhang-wang-deep', title: '六张网规划实施方案深度解读：7万亿投资的底层逻辑与投资主线', desc: '从政治局定调到发改委落地，六张网的投资逻辑、产业链拆解、多网协同效应与时间窗口。', date: '2026-05-25', readTime: '约 15 分钟阅读', tag: '政策解读' },
-  { slug: 'liu-zhang-wang', title: '>7万亿！六张网同时开建，这波基建红利对普通人意味着什么？', desc: '政治局定调、发改委落地——六张网不是重复建设，是"组网"。', date: '2026-05-22', readTime: '约 6 分钟阅读', tag: '政策解读' },
+  { slug: 'suan-dian-xie-tong-deep-analysis', title: '算电协同深度分析：当算力遇上电力的结构性机会', desc: '底层逻辑从"电随算动"到"算随电动"，五大落地模式与四条投资主线的全面拆解。', date: '2026-05-29', readTime: '约 12 分钟阅读', tag: '算电协同' },
+  { slug: 'liu-zhang-wang-deep', title: '六张网规划实施方案深度解读：7万亿投资的底层逻辑', desc: '从政治局定调到发改委落地，六张网的投资逻辑、产业链拆解、多网协同效应与时间窗口。', date: '2026-05-25', readTime: '约 15 分钟阅读', tag: '政策解读' },
+  { slug: 'liu-zhang-wang', title: '>7万亿！六张网同时开建，这波基建红利对普通人意味着什么？', desc: '政治局定调、发改委落地——六张网不是重复建设，是"组网"。七个投资方向和一个算电协同的单独机会。', date: '2026-05-22', readTime: '约 6 分钟阅读', tag: '政策解读' },
   { slug: 'suan-dian-xie-tong-2', title: '算电协同产业链拆解：利润池在哪里？', desc: '上游绿电供给、中游智算基建、下游算力服务——三层的利润分布、竞争格局和卡位策略。', date: '2026-05-18', readTime: '约 10 分钟阅读', tag: '算电协同' },
   { slug: 'suan-dian-xie-tong-1', title: '算电协同：为什么这是未来五年确定性很高的投资主题', desc: 'AI 算力集群用电已进入 500MW 级，算力正在成为新的电力需求。', date: '2026-05-15', readTime: '约 8 分钟阅读', tag: '算电协同' },
   { slug: 'dian-li-xian-huo-di-ceng-luo-ji', title: '电力现货交易底层逻辑及核心竞争力', desc: '五大维度拆解电力现货交易核心竞争力：预测能力、交易策略、风险管理、技术系统与资源整合。', date: '2025-08-11', readTime: '约 8 分钟阅读', tag: '电力交易' },
-  { slug: 'zhi-neng-ti-dian-wang', title: '智能体电网：虚拟电厂的终极革命', desc: '分布式自治如何重构14亿人的用电安全——从神经科学到Agent Grid架构。', date: '2025-07-17', readTime: '约 7 分钟阅读', tag: '虚拟电厂' },
 ];
+const featured = articles[0];
+const rest = articles.slice(1);
 ---
 
-<BaseLayout title="首页" description="算电协同 · 电力交易 · 新能源 — 专业内容与投资分析">
+<BaseLayout title="首页" description="算电协同 · 电力交易 · 新能源 — 专业内容与投资分析" wide>
+  <!-- Hero -->
   <section class="hero">
-    <div class="hero-bg-decor" aria-hidden="true">
-      <svg viewBox="0 0 260 260" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="200" cy="60" r="80" stroke="currentColor" stroke-width="0.5" opacity="0.3" />
-        <circle cx="130" cy="130" r="100" stroke="currentColor" stroke-width="0.5" opacity="0.2" />
-        <path d="M60 200 Q 100 160 140 190 Q 180 220 220 180" stroke="currentColor" stroke-width="0.8" opacity="0.25" fill="none" />
-        <path d="M30 130 Q 80 100 130 120 Q 180 140 230 110" stroke="currentColor" stroke-width="0.6" opacity="0.15" fill="none" />
-        <circle cx="200" cy="60" r="3" fill="currentColor" opacity="0.3" />
-        <circle cx="140" cy="190" r="2" fill="currentColor" opacity="0.25" />
-        <circle cx="230" cy="110" r="2" fill="currentColor" opacity="0.2" />
-      </svg>
-    </div>
-    <div class="hero-content">
-      <h1 class="hero-anim">算电协同 · 电力交易 · 新能源</h1>
-      <div class="subtitle hero-anim">
-        <strong>内容专注方向</strong> — 算力与电力协同、电力市场改革、新能源基础设施投资。
-        记录专业思考，沉淀可复用框架。
-      </div>
-      <div class="hero-stats hero-anim">
-        <span class="stat"><strong>{articles.length}</strong> 篇文章</span>
-        <span class="stat-divider"></span>
-        <span class="stat"><strong>8</strong> 个主题</span>
-        <span class="stat-divider"></span>
-        <span class="stat">持续更新中</span>
-      </div>
-      <a href="/about" class="cta hero-anim">了解更多 →</a>
+    <p class="hero-label">陈道雷</p>
+    <h1 class="hero-title">算电协同 · 电力交易 · 新能源</h1>
+    <p class="hero-desc">算力与电力协同、电力市场改革、新能源基础设施投资的<br class="hide-mobile"/>深度分析与投资框架。记录专业思考，沉淀可复用框架。</p>
+    <div class="hero-stats">
+      <span class="hero-stat"><span class="stat-num">{articles.length}</span> 篇文章</span>
+      <span class="stat-dot"></span>
+      <span class="hero-stat"><span class="stat-num">8</span> 个主题</span>
+      <span class="stat-dot"></span>
+      <span class="hero-stat">持续更新中</span>
     </div>
   </section>
 
-  <section>
-    <div class="section-header">
+  <!-- Featured Article -->
+  <section class="section">
+    <div class="section-head">
       <h2>最新文章</h2>
       <a href="/blog" class="section-link">查看全部 →</a>
     </div>
-    <ul class="article-card-grid">
-      {articles.slice(0, 5).map((a) => (
-        <ArticleCard {...a} />
-      ))}
-      <li class="article-card more-card">
-        <a href="/blog" class="more-card-link">
-          <span class="more-icon">+</span>
-          <span class="more-text">还有 <strong>{articles.length - 5}</strong> 篇 →</span>
-        </a>
-      </li>
-    </ul>
+    <a href={`/blog/${featured.slug}`} class="featured-card">
+      <span class="featured-tag">{featured.tag}</span>
+      <h3 class="featured-title">{featured.title}</h3>
+      <p class="featured-desc">{featured.desc}</p>
+      <span class="featured-meta">{featured.date} · {featured.readTime}</span>
+    </a>
   </section>
 
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      if (typeof gsap !== 'undefined') {
-        var heroEls = document.querySelectorAll('.hero-anim');
-        if (heroEls.length) {
-          gsap.from(heroEls, {
-            y: 30,
-            opacity: 0,
-            duration: 0.7,
-            ease: 'power3.out',
-            stagger: 0.15
-          });
-        }
-      }
-    });
-  </script>
+  <!-- Rest of Articles -->
+  <section class="section">
+    <ul class="article-grid">
+      {rest.slice(0, 6).map((a) => (
+        <ArticleCard {...a} />
+      ))}
+    </ul>
+    {articles.length > 7 && (
+      <div class="more-wrap">
+        <a href="/blog" class="more-link">浏览全部 {articles.length} 篇文章 →</a>
+      </div>
+    )}
+  </section>
 </BaseLayout>
 
 <style>
-  .article-card-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    list-style: none;
-    padding: 0;
+  /* === Hero Section === */
+  .hero {
+    text-align: center;
+    padding: 3.5rem 0 4rem;
+    position: relative;
+  }
+  .hero-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  .hero-title {
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    color: var(--text);
+  }
+  .hero-desc {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero-stats {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+  }
+  .stat-num {
+    font-weight: 650;
+    color: var(--text);
+  }
+  .stat-dot {
+    width: 3px; height: 3px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    opacity: 0.4;
   }
 
-  .section-header {
+  /* === Section === */
+  .section {
+    margin-bottom: 3.5rem;
+  }
+  .section-head {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
     margin-bottom: 1.5rem;
   }
-  .section-header h2 {
+  .section-head h2 {
     margin: 0;
+    font-size: 1.4rem;
   }
   .section-link {
-    font-size: 0.9rem;
-    color: var(--color-text-muted);
+    font-size: 0.85rem;
+    color: var(--text-muted);
     text-decoration: none;
+    font-weight: 500;
   }
   .section-link:hover {
-    color: var(--color-accent);
+    color: var(--accent);
   }
 
-  .hero-stats {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-    font-size: 0.9rem;
-    color: var(--color-text-muted);
-  }
-  .hero-stats .stat strong {
-    color: var(--color-text);
-    font-weight: 700;
-    font-size: 1.1rem;
-  }
-  .stat-divider {
-    width: 1px;
-    height: 16px;
-    background: var(--color-border);
-  }
-
-  .more-card {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--color-bg-card);
-    border: 1px dashed var(--color-border);
+  /* === Featured Card === */
+  .featured-card {
+    display: block;
+    background: linear-gradient(135deg, var(--accent-bg), var(--bg-card));
+    border: 1px solid color-mix(in srgb, var(--accent) 20%, var(--border));
     border-radius: var(--radius-card);
-    transition: all 0.25s ease;
-    cursor: pointer;
-    min-height: 140px;
-  }
-  .more-card:hover {
-    border-color: var(--color-accent);
-    background: var(--color-accent-bg);
-  }
-  .more-card-link {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
+    padding: 1.75rem 2rem;
     text-decoration: none;
-    color: var(--color-text-muted);
+    transition: all 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
   }
-  .more-card-link:hover {
+  .featured-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 3px; height: 100%;
+    background: var(--accent);
+    border-radius: 0 2px 2px 0;
+  }
+  .featured-card:hover {
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-2px);
+    border-color: var(--accent);
     text-decoration: none;
-    color: var(--color-accent);
   }
-  .more-icon {
-    font-size: 2rem;
-    font-weight: 300;
-    line-height: 1;
-    color: var(--color-accent);
-    opacity: 0.6;
+  .featured-tag {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
   }
-  .more-text {
-    font-size: 0.85rem;
+  .featured-title {
+    font-size: 1.3rem;
+    font-weight: 650;
+    color: var(--text);
+    margin: 0.5rem 0;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    transition: color 0.15s;
   }
-  .more-text strong {
-    color: var(--color-text);
+  .featured-card:hover .featured-title {
+    color: var(--accent);
+  }
+  .featured-desc {
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0 0 0.75rem;
+  }
+  .featured-meta {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  /* === Article Grid === */
+  .article-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .more-wrap {
+    text-align: center;
+    margin-top: 1.5rem;
+  }
+  .more-link {
+    display: inline-block;
+    font-size: 0.88rem;
+    color: var(--accent);
+    font-weight: 500;
+    padding: 0.5rem 1.5rem;
+    border-radius: 20px;
+    border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+    transition: all 0.2s;
+  }
+  .more-link:hover {
+    background: var(--accent-bg);
+    text-decoration: none;
   }
 
   @media (max-width: 640px) {
-    .article-card-grid {
-      grid-template-columns: 1fr;
-    }
-    .hero-stats {
-      flex-wrap: wrap;
-      gap: 0.75rem;
-    }
+    .hero { padding: 2rem 0 2.5rem; }
+    .hero-title { font-size: 2rem; }
+    .hero-desc { font-size: 1rem; }
+    .hero-desc br.hide-mobile { display: none; }
+    .article-grid { grid-template-columns: 1fr; }
+    .featured-card { padding: 1.25rem 1.5rem; }
   }
 </style>

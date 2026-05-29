@@ -1,0 +1,166 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import RelatedArticles from '../../components/RelatedArticles.astro';
+---
+
+<BaseLayout title="HUIIHONG PPT 模版开发：从AI协作到可复用技能的全记录" description="用 python-pptx 为汇竑资本开发 PPT 自动生成模版的十轮迭代过程——从精确测量、图标系统演进、语义化映射，到最终封装为可复用技能。">
+  <a href="/blog" class="back-link">← 返回文章列表</a>
+
+  <h1>HUIIHONG PPT 模版开发：从AI协作到可复用技能的全记录</h1>
+  <div class="article-meta">
+    <span>2026-05-29</span>
+    <span>· 约 10 分钟阅读</span>
+  </div>
+  <div class="tags">
+    <span class="tag">AI 协作</span>
+    <span class="tag">PPT</span>
+    <span class="tag">python-pptx</span>
+    <span class="tag">效率工具</span>
+  </div>
+
+  <p>这篇文章记录了为一个投资路演 PPT 模版（汇竑资本 HUIIHONG 品牌，红金配色）开发 python-pptx 自动生成脚本，历经十轮迭代后封装为 OpenCode 可复用技能的完整过程。</p>
+
+  <p>核心数据：<strong>10 轮迭代</strong>，<strong>~750 行 Python</strong>，<strong>11 种自定义图标</strong>，<strong>20+ MSO_SHAPE 形状</strong>，最终生成 <strong>15 页投资报告 PPT</strong>。</p>
+
+  <h2>背景：为什么需要自动生成 PPT</h2>
+
+  <p>在算电协同投资研究中，频繁需要生成格式统一的投资路演 PPT。人工拖拽太慢，传统模板太死板。目标是用 python-pptx 实现：给定结构化数据 → 自动生成品牌一致的 PPT。</p>
+
+  <p>汇竑资本的 HUIIHONG 品牌有明确的视觉规范：深红 #C00000 + 金色 #D4AF37 + 白底卡片。难点在于精确复刻模版中的所有间距和对齐——0.01 英寸的偏差在放大后都会变得明显。</p>
+
+  <h2>第一轮：精确测量与基础架构</h2>
+
+  <p>从一份 40 页的参考模版（<em>内蒙古新质动能科创投资基金路演报告申报材料</em>）开始。用 python-pptx 逐页读取所有形状的位置、大小、颜色等属性：</p>
+
+  <pre>from pptx import Presentation
+prs = Presentation('template.pptx')
+for slide in prs.slides:
+    for shape in slide.shapes:
+        print(shape.left, shape.top, shape.width, shape.height, shape.shape_type)</pre>
+
+  <p>关键发现：<strong>python-pptx 的 Emu 单位 = 英寸 × 914400</strong>。所有模版元素都精确到 Emu 级别——比如 header bar 的 outer 框在 L0.642 T0.483，inner 红色 rect 在 L0.875 T0.684。</p>
+
+  <p>这一轮确定了基础架构：<code>_add_header_bar</code> + <code>_add_header_title</code> + <code>_add_logo</code> + <code>_add_page_number</code> 的页面骨架，以及 <code>_set_cn_font</code> 这个关键辅助函数——没有它，中文字符在 PPTX 中会显示为方框。</p>
+
+  <h2>第二轮：封面与内容页布局</h2>
+
+  <p>封面的核心挑战是模板中使用了背景图（城市夜景半透明），脚本需要检测图片是否存在，否则 fallback 到纯色背景。封面设计了黄金分隔线的位置（T4.80），以及底部的合规免责声明。</p>
+
+  <p>内容页采用「header bar + 标题 + 分页线 + logo + 正文」的五段式布局。卡片则采用「白底 + 0.042英寸红色左竖条」的模板标识模式。</p>
+
+  <h2>第三轮：TOC 分节页</h2>
+
+  <p>目录页（TOC）的难点在于需要模拟模板的 2×2 网格布局。每个 TOC 项目是一个圆角矩形，当前章节红色高亮（#C00000），其他章节灰色边框。</p>
+
+  <p>最初的实现没有金色图标，后来经历了「先加 → 又被去掉 → 最终加上更精致的」的反复。</p>
+
+  <h2>第四轮：卡片布局系统</h2>
+
+  <p>两种核心卡片布局：</p>
+
+  <ul>
+    <li><strong>竖式卡片（vert_cards）</strong>：2 列布局，左侧 label + body，右侧保持空白呼吸感。适用于文字较多的场景。</li>
+    <li><strong>三列卡片（3col_cards）</strong>：3 列等宽布局，带 metrics 子指标。适用于对比分析。</li>
+  </ul>
+
+  <p>其中三列卡片是收益最高的布局——视觉冲击力强、信息密度适中，适合投资 PPT 的「论据页」。</p>
+
+  <h2>第五~七轮：图标系统的三次演进</h2>
+
+  <p>图标系统是迭代次数最多的部分，共经历了三次重写：</p>
+
+  <h3>V1：简单几何（红/金色菱形、圆形）</h3>
+  <p>用 <code>MSO_SHAPE</code> 的 OVAL、DIAMOND 等基本形状。优点是实现简单，缺点是样式单调，且与卡片内容毫无关联。</p>
+
+  <h3>V2：复杂形状映射（金色圆角矩形 + 白色几何）</h3>
+  <p>参考模版第 9 页，实现「金色 #BF9000 圆角矩形背景 + 白色形状」的两层结构。引入了 10 种 MSO_SHAPE 形状映射（star/hexagon/cross/chevron 等），开始根据卡片内容选择不同形状。</p>
+
+  <p>这一版的问题：形状仍然是简单的几何图形，缺乏<strong>语义</strong>——比如用「齿轮」代表技术、「闪电」代表电力，而这些简单的 MSO_SHAPE 做不到。</p>
+
+  <h3>V3：Pillow 自定义 PNG（有意义的图标）</h3>
+  <p>最终方案：用 Python Pillow 在内存中绘制透明 PNG 图标，每一笔都是白色像素。然后通过 <code>add_picture</code> 嵌入 PPT。实现了 11 种语义图标：</p>
+
+  <table>
+    <tr><th>图标</th><th>形状</th><th>含义映射</th><th>示例场景</th></tr>
+    <tr><td>靶子 🎯</td><td>同心圆 + 准心</td><td>目标/聚焦</td><td>双碳目标、投资方向</td></tr>
+    <tr><td>盾牌 🛡</td><td>多边形盾形</td><td>政策/安全</td><td>政策护航、估值安全</td></tr>
+    <tr><td>奖杯 🏆</td><td>高脚杯 + 把手</td><td>成就/回报</td><td>投资回报、成果</td></tr>
+    <tr><td>天平 ⚖</td><td>横梁 + 底座 + 托盘</td><td>公平/政策</td><td>政策评估、市场公平</td></tr>
+    <tr><td>K线图 📈</td><td>坐标轴 + 柱状条 + 趋势线</td><td>市场/数据</td><td>市场驱动、数据分析</td></tr>
+    <tr><td>握手 🤝</td><td>重叠弧线</td><td>合作/协同</td><td>算电协同、交易合作</td></tr>
+    <tr><td>放大镜 🔍</td><td>圆形 + 手柄</td><td>观察/研究</td><td>行业研究、深度分析</td></tr>
+    <tr><td>书籍 📖</td><td>打开的书本</td><td>知识/研究</td><td>方法论、理论基础</td></tr>
+    <tr><td>房屋 🏠</td><td>三角屋顶 + 方形</td><td>稳定/基础</td><td>基础设施、底层架构</td></tr>
+    <tr><td>架构图 🏗</td><td>建筑 + 三角形屋顶</td><td>产业链</td><td>产业链分析、系统架构</td></tr>
+    <tr><td>地球 🌐</td><td>圆形 + 经纬线</td><td>全球/宏观</td><td>全球市场、宏观分析</td></tr>
+  </table>
+
+  <p>这套系统的核心是 <code>_add_gold_icon</code> 函数：它先检查是否有自定义 PNG（查 _ICON_DRAW 字典），有则用；没有则 fallback 到 MSO_SHAPE 的几何形状。这种"插件式"设计让后续扩充图标只需要添加一个绘图函数。</p>
+
+  <h2>第八轮：语义化映射</h2>
+
+  <p>有了丰富的图标库之后，关键是把每个卡片标题映射到最合适的图标。这不是随意的——每张卡都经过语义匹配：</p>
+
+  <table>
+    <tr><th>页面</th><th>卡片标题</th><th>图标</th><th>映射逻辑</th></tr>
+    <tr><td>P2 最佳时机</td><td>技术条件成熟</td><td>齿轮 ⚙</td><td>技术 = 齿轮</td></tr>
+    <tr><td>P3 驱动因素</td><td>市场驱动</td><td>K线图 📈</td><td>市场 = 数据/K线</td></tr>
+    <tr><td>P4 政策演进</td><td>正式入策</td><td>钻石 ◆</td><td>重要事件 = 钻石</td></tr>
+    <tr><td>P5 政策叠加</td><td>双碳目标</td><td>靶子 🎯</td><td>目标/靶子 = target</td></tr>
+    <tr><td>P6 产业链</td><td>协同侧</td><td>握手 🤝</td><td>协同 = 握手</td></tr>
+    <tr><td>P7 市场规模</td><td>全球算力市场</td><td>地球 🌐</td><td>全球 = 地球</td></tr>
+    <tr><td>P8 投资逻辑</td><td>估值安全边际</td><td>八边形 ⛔</td><td>安全/警示 = octagon</td></tr>
+    <tr><td>P9 布局企业</td><td>协鑫能科</td><td>太阳 ☀</td><td>能源 = 太阳</td></tr>
+    <tr><td>P10 风险</td><td>竞争加剧风险</td><td>八边形 ⛔</td><td>风险警示 = octagon</td></tr>
+  </table>
+
+  <p>最受好评的映射是「协同→握手」和「双碳目标→靶子」——用户原话是"这样会显得很有设计感和质感"。</p>
+
+  <h2>第九~十轮：死代码清理与系统打磨</h2>
+
+  <p>金无足赤。第一版的自定义图标系统里混入了几个不存在的 MSO_SHAPE（如 <code>MSO_SHAPE.SHIELD</code> 在 python-pptx 中并不存在），导致运行报错。还有未使用的 <code>_add_numbered_gold_circle</code> 死代码。</p>
+
+  <p>所有 icon 数组最终通过 <code>grep icons=</code> 逐行验证，确保每个图标名都存在于 <code>_ICON_DRAW</code> 或 <code>_ICON_SHAPES</code> 字典中。</p>
+
+  <h2>从脚本到技能：封装为可复用模版</h2>
+
+  <p>完成十轮迭代后，脚本运行稳定，生成 15 页 PPT 只需要几秒钟。但更好的做法是把它封装成一个<strong>可复用的 OpenCode 技能</strong>，让 AI 能够理解它的能力边界并正确调用。</p>
+
+  <p>技能封装了三个关键资产：</p>
+
+  <ul>
+    <li><strong>SKILL.md</strong>：技能文档，说明触发条件（汇竑/红金等关键词）、工作流（4 阶段流程）、参考文件结构</li>
+    <li><strong>scripts/gen_huihong_v2.py</strong>：~750 行的完整生成脚本，包含所有布局函数和图标系统</li>
+    <li><strong>assets/</strong>：logo、封面背景图、banner 等静态素材</li>
+  </ul>
+
+  <p>技能安装路径：<code>~/.agents/skills/huihong-ppt/</code>。当 AI 检测到用户需要生成"汇竑风格 PPT"、"红金配色路演材料"时，自动加载此技能。</p>
+
+  <h2>技术与架构决策总结</h2>
+
+  <table>
+    <tr><th>决策</th><th>选择</th><th>原因</th></tr>
+    <tr><td>单位系统</td><td>英寸（Inches）</td><td>模版中所有数值以英寸测量，保持整数精度</td></tr>
+    <tr><td>颜色字典</td><td>全局 C 字典</td><td>一处定义全身引用，避免色值漂移</td></tr>
+    <tr><td>图标系统</td><td>Pillow PNG + MSO_SHAPE 混合</td><td>自定义图标有语义，MSO_SHAPE 做 fallback</td></tr>
+    <tr><td>卡片布局</td><td>vert / 3col 两种模式</td><td>覆盖绝大多数内容场景</td></tr>
+    <tr><td>TOC 分节</td><td>2×2 网格 + 红色高亮</td><td>严格复制模版风格</td></tr>
+    <tr><td>字体处理</td><td>_set_cn_font 双字体回退</td><td>确保中英文在不同系统上正确渲染</td></tr>
+  </table>
+
+  <h2>AI 协作的经验教训</h2>
+
+  <p>这次开发过程中有几个值得记录的协作经验：</p>
+
+  <ol>
+    <li><strong>不要猜测模版参数</strong>：永远用脚本读取模版的实际数值，而非人眼估计。0.01 英寸的偏差在投影时会被放大。</li>
+    <li><strong>语义映射优于随机图形</strong>：用户多次反馈"图标与内容不匹配"——最终用 Pillow 自定义绘制的方案最被认可。</li>
+    <li><strong>用户是模版专家</strong>：开发过程中用户多次指出"参照模版第 X 页的做法"——把参考文件纳入上下文比 AI 凭空想象准确得多。</li>
+    <li><strong>死代码影响信任</strong>：一个不存在的 MSO_SHAPE.SHIELD 报错就会中断整个生成流程。每轮迭代后 grep 验证所有引用是必要的。</li>
+    <li><strong>从脚本到技能是质的飞跃</strong>：脚本只能执行固定逻辑，技能让 AI 理解能力边界、正确调用、甚至组合多个技能（比如这篇文章就是另一个技能生成的）。</li>
+  </ol>
+
+  <p>相关的开发记录已沉淀为 OpenCode 技能，完整代码见 <code>~/.agents/skills/huihong-ppt/</code>。</p>
+
+<RelatedArticles currentSlug="huihong-ppt-dev-journey" category="AI 协作" />
+</BaseLayout>

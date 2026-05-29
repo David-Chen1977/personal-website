@@ -10,38 +10,38 @@ interface Article {
   date: string;
   readTime: string;
   category: string;
-  emoji: string;
 }
 
 const articles: Article[] = [
-  { slug: 'suan-dian-xie-tong-deep-analysis', title: '算电协同深度分析：当算力遇上电力的结构性机会', desc: '底层逻辑从"电随算动"到"算随电动"，五大落地模式与四条投资主线的全面拆解。2026-2027是最佳布局期。', date: '2026-05-29', readTime: '约 12 分钟', category: '算电协同', emoji: '⚡' },
-  { slug: 'suan-dian-xie-tong-AI', title: '算电协同：AI 下半场，电比芯片更稀缺', desc: '算力遇到电力瓶颈，中美两套体制给出了完全不同的应对逻辑。三层投资优先级和六个商业模式拆解。', date: '2026-05-28', readTime: '约 10 分钟', category: '算电协同', emoji: '⚡' },
-  { slug: 'liu-zhang-wang-deep', title: '六张网规划实施方案深度解读：7万亿投资的底层逻辑与投资主线', desc: '从政治局定调到发改委落地，六张网的投资逻辑、产业链拆解、多网协同效应与时间窗口。', date: '2026-05-25', readTime: '约 15 分钟', category: '政策解读', emoji: '📋' },
-  { slug: 'liu-zhang-wang', title: '>7万亿！六张网同时开建，这波基建红利对普通人意味着什么？', desc: '政治局定调、发改委落地——六张网不是重复建设，是"组网"。七个投资方向和一个算电协同的单独机会。', date: '2026-05-22', readTime: '约 6 分钟', category: '政策解读', emoji: '📋' },
-  { slug: 'suan-dian-xie-tong-2', title: '算电协同产业链拆解：利润池在哪里？', desc: '上游绿电供给、中游智算基建、下游算力服务——三层的利润分布、竞争格局和卡位策略。', date: '2026-05-18', readTime: '约 10 分钟', category: '算电协同', emoji: '⚡' },
-  { slug: 'suan-dian-xie-tong-1', title: '算电协同：为什么这是未来五年确定性很高的投资主题', desc: 'AI 算力集群用电已进入 500MW 级，算力正在成为新的电力需求。算电协同首次进入政府工作报告。', date: '2026-05-15', readTime: '约 8 分钟', category: '算电协同', emoji: '⚡' },
-  { slug: 'impossible-triangle', title: '不可能铁三角与战略分层定价：华为思路对投资的启示', desc: '质量、成本、低价不可兼得。华为的解法不是三选二，而是市场分层。对基础设施投资的启示。', date: '2026-05-12', readTime: '约 5 分钟', category: '投资方法论', emoji: '📊' },
-  { slug: 'ppt-quality-lessons', title: 'PPT 布局质量迭代：从 57 个问题到零缺陷', desc: '用 python-pptx 自动生成投资报告 PPT 的过程中遇到的布局问题及其系统化修复方法。', date: '2026-05-10', readTime: '约 5 分钟', category: 'AI 协作', emoji: '🤖' },
-  { slug: 'dian-li-xian-huo-di-ceng-luo-ji', title: '电力现货交易底层逻辑及核心竞争力', desc: '五大关键维度拆解电力现货交易的核心竞争力：预测能力、交易策略、风险管理、技术系统与资源整合。', date: '2025-08-11', readTime: '约 8 分钟', category: '电力交易', emoji: '⚡' },
-  { slug: 'zhi-neng-ti-dian-wang', title: '智能体电网：虚拟电厂的终极革命', desc: '分布式自治如何重构14亿人的用电安全——从神经科学启示到Agent Grid架构，虚拟电厂的代际进化。', date: '2025-07-17', readTime: '约 7 分钟', category: '虚拟电厂', emoji: '🔌' },
-  { slug: 'ya-zhou-li-yao-dai', title: '"亚洲锂腰带"横空出世：中国如何重塑全球新能源权力版图', desc: '横跨川青藏新的亚洲锂腰带已探明锂资源超3000万吨，中国锂资源储量跃居全球第二。', date: '2025-09-11', readTime: '约 5 分钟', category: '新能源', emoji: '🌱' },
-  { slug: 'AI-miao-sha-xian-huo', title: 'AI秒杀现货交易！电力市场惊现12%收益暴增', desc: 'LSTM、强化学习、NLP——AI正化身电力现货交易的核心引擎，从预测到风控再到交易决策全面重构市场逻辑。', date: '2025-06-21', readTime: '约 5 分钟', category: 'AI+电力', emoji: '🤖' },
-  { slug: 'guang-chu-chong-yi-ti-hua', title: '光储充一体化：新能源时代电力系统的"破局之钥"', desc: '光伏、储能、充电三大模块通过集成释放系统级价值，重构电力系统基因的进化之路。', date: '2025-06-14', readTime: '约 5 分钟', category: '新能源', emoji: '🌱' },
-  { slug: 'shou-dian-gong-si-sheng-cun-zhi-nan', title: '2025年售电公司生存指南：三类公司如何强行续命？', desc: '电改57号文后售电行业大洗牌，三类公司存活路线：变身电力美团、绑定新能源巨头、抢占碳数据入口。', date: '2025-06-10', readTime: '约 4 分钟', category: '售电公司', emoji: '💼' },
-  { slug: 'huo-dian-ling-huo-xing-gai-zao', title: '电力现货市场新规落地，火电灵活性改造迎风口', desc: '现货电价波动加大是确定性趋势，火电调峰价值正在重估，储能和新能源市场化收益提升。', date: '2026-02-28', readTime: '约 3 分钟', category: '电力交易', emoji: '⚡' },
-  { slug: 'zu-he-tou-zi-yin-zi-tou-zi', title: '组合投资和因子投资对房地产投资策略的启示', desc: '永久组合、全天候组合、斯文森组合与因子投资——经典投资策略能否应用到房地产投资决策？', date: '2020-07-28', readTime: '约 8 分钟', category: '投资方法论', emoji: '📊' },
+  { slug: 'suan-dian-xie-tong-deep-analysis', title: '算电协同深度分析：当算力遇上电力的结构性机会', desc: '底层逻辑从"电随算动"到"算随电动"，五大落地模式与四条投资主线的全面拆解。', date: '2026-05-29', readTime: '12 分钟', category: '算电协同' },
+  { slug: 'suan-dian-xie-tong-AI', title: '算电协同：AI 下半场，电比芯片更稀缺', desc: '算力遇到电力瓶颈，中美两套体制给出了完全不同的应对逻辑。三层投资优先级和六个商业模式拆解。', date: '2026-05-28', readTime: '10 分钟', category: '算电协同' },
+  { slug: 'liu-zhang-wang-deep', title: '六张网规划实施方案深度解读：7万亿投资的底层逻辑', desc: '从政治局定调到发改委落地，六张网的投资逻辑、产业链拆解、多网协同效应与时间窗口。', date: '2026-05-25', readTime: '15 分钟', category: '政策解读' },
+  { slug: 'liu-zhang-wang', title: '>7万亿！六张网同时开建，这波基建红利对普通人意味着什么？', desc: '政治局定调、发改委落地——六张网不是重复建设，是"组网"。七个投资方向和一个算电协同的单独机会。', date: '2026-05-22', readTime: '6 分钟', category: '政策解读' },
+  { slug: 'suan-dian-xie-tong-2', title: '算电协同产业链拆解：利润池在哪里？', desc: '上游绿电供给、中游智算基建、下游算力服务——三层的利润分布、竞争格局和卡位策略。', date: '2026-05-18', readTime: '10 分钟', category: '算电协同' },
+  { slug: 'suan-dian-xie-tong-1', title: '算电协同：为什么这是未来五年确定性很高的投资主题', desc: 'AI 算力集群用电已进入 500MW 级，算力正在成为新的电力需求。', date: '2026-05-15', readTime: '8 分钟', category: '算电协同' },
+  { slug: 'impossible-triangle', title: '不可能铁三角与战略分层定价：华为思路对投资的启示', desc: '质量、成本、低价不可兼得。华为的解法不是三选二，而是市场分层。对基础设施投资的启示。', date: '2026-05-12', readTime: '5 分钟', category: '投资方法论' },
+  { slug: 'huihong-ppt-dev-journey', title: 'HUIIHONG PPT 模版开发：从AI协作到可复用技能的全记录', desc: '十轮迭代从测量模版到 Pillow 自绘图标，最终封装为 OpenCode 可复用技能的完整过程。', date: '2026-05-29', readTime: '10 分钟', category: 'AI 协作' },
+  { slug: 'ppt-quality-lessons', title: 'PPT 布局质量迭代：从 57 个问题到零缺陷', desc: '用 python-pptx 自动生成投资报告 PPT 的过程中遇到的布局问题及其系统化修复方法。', date: '2026-05-10', readTime: '5 分钟', category: 'AI 协作' },
+  { slug: 'dian-li-xian-huo-di-ceng-luo-ji', title: '电力现货交易底层逻辑及核心竞争力', desc: '五大关键维度拆解电力现货交易的核心竞争力。', date: '2025-08-11', readTime: '8 分钟', category: '电力交易' },
+  { slug: 'ya-zhou-li-yao-dai', title: '"亚洲锂腰带"横空出世：中国如何重塑全球新能源权力版图', desc: '横跨川青藏新的亚洲锂腰带已探明锂资源超3000万吨。', date: '2025-09-11', readTime: '5 分钟', category: '新能源' },
+  { slug: 'zhi-neng-ti-dian-wang', title: '智能体电网：虚拟电厂的终极革命', desc: '分布式自治如何重构14亿人的用电安全——从神经科学到Agent Grid架构。', date: '2025-07-17', readTime: '7 分钟', category: '虚拟电厂' },
+  { slug: 'AI-miao-sha-xian-huo', title: 'AI秒杀现货交易！电力市场惊现12%收益暴增', desc: 'AI正化身电力现货交易的核心引擎，从预测到风控再到交易决策全面重构。', date: '2025-06-21', readTime: '5 分钟', category: 'AI+电力' },
+  { slug: 'guang-chu-chong-yi-ti-hua', title: '光储充一体化：新能源时代电力系统的"破局之钥"', desc: '光伏、储能、充电三大模块通过集成释放系统级价值。', date: '2025-06-14', readTime: '5 分钟', category: '新能源' },
+  { slug: 'shou-dian-gong-si-sheng-cun-zhi-nan', title: '2025年售电公司生存指南：三类公司如何强行续命？', desc: '电改57号文后售电行业大洗牌，三类公司存活路线。', date: '2025-06-10', readTime: '4 分钟', category: '售电公司' },
+  { slug: 'huo-dian-ling-huo-xing-gai-zao', title: '电力现货市场新规落地，火电灵活性改造迎风口', desc: '现货电价波动加大是确定性趋势，火电调峰价值正在重估。', date: '2026-02-28', readTime: '3 分钟', category: '电力交易' },
+  { slug: 'zu-he-tou-zi-yin-zi-tou-zi', title: '组合投资和因子投资对房地产投资策略的启示', desc: '经典投资策略能否应用到房地产投资决策？', date: '2020-07-28', readTime: '8 分钟', category: '投资方法论' },
 ];
+const sorted = articles.sort((a, b) => b.date.localeCompare(a.date));
 ---
 
-<BaseLayout title="文章" description="算电协同 · 电力交易 · 新能源 · 投资方法论">
-  <a href="/" class="back-link">← 返回首页</a>
+<BaseLayout title="文章" description="算电协同 · 电力交易 · 新能源 · 投资方法论" wide>
+  <div class="page-head">
+    <h1>文章</h1>
+    <p class="page-desc">
+      已发布 <strong>{articles.length}</strong> 篇文章，覆盖 <strong>{categories.length}</strong> 个主题。
+    </p>
+  </div>
 
-  <h1>文章</h1>
-  <p style="margin-bottom: 1.5rem;">
-    已发布 <strong>{articles.length}</strong> 篇文章，覆盖 <strong>{categories.length}</strong> 个主题。
-  </p>
-
-  <!-- Tag Filter -->
   <div class="filter-bar" id="filterBar">
     <button class="filter-btn active" data-filter="all">全部</button>
     {categories.map((cat) => (
@@ -49,146 +49,136 @@ const articles: Article[] = [
     ))}
   </div>
 
-  <!-- Article List -->
   <div class="article-list" id="articleList">
-    {articles.sort((a, b) => b.date.localeCompare(a.date)).map((a) => (
-      <article class="article-item" data-category={a.category}>
-        <div class="article-emoji">{a.emoji}</div>
-        <div class="article-content">
-          <div class="article-category">{a.category}</div>
-          <a href={`/blog/${a.slug}`} class="article-title">{a.title}</a>
-          <div class="article-desc">{a.desc}</div>
-          <div class="article-meta">{a.date} · {a.readTime}</div>
-        </div>
+    {sorted.map((a) => (
+      <article class="article-row" data-category={a.category}>
+        <a href={`/blog/${a.slug}`} class="row-link">
+          <div class="row-body">
+            <div class="row-category">{a.category}</div>
+            <h3 class="row-title">{a.title}</h3>
+            <p class="row-desc">{a.desc}</p>
+            <div class="row-meta">{a.date} · {a.readTime}</div>
+          </div>
+        </a>
       </article>
     ))}
   </div>
 </BaseLayout>
 
 <style>
+  .page-head {
+    margin-bottom: 2rem;
+  }
+  .page-head h1 {
+    margin-bottom: 0.4rem;
+  }
+  .page-desc {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+  }
+
   .filter-bar {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.4rem;
     flex-wrap: wrap;
-    margin-bottom: 1.5rem;
-    padding-bottom: 1.25rem;
-    border-bottom: 1px solid var(--color-border-light);
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-light);
   }
   .filter-btn {
-    background: var(--color-bg-card);
-    border: 1px solid var(--color-border-light);
-    color: var(--color-text-muted);
-    padding: 0.35rem 0.85rem;
-    border-radius: 20px;
-    font-size: 0.82rem;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    padding: 0.3rem 0.75rem;
+    border-radius: 16px;
+    font-size: 0.8rem;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s;
   }
   .filter-btn:hover {
-    border-color: var(--color-accent);
-    color: var(--color-accent);
+    color: var(--text);
+    background: var(--bg-elevated);
   }
   .filter-btn.active {
-    background: var(--color-accent);
+    background: var(--accent);
     color: #fff;
-    border-color: var(--color-accent);
   }
 
   .article-list {
     display: flex;
     flex-direction: column;
-    gap: 0;
   }
-
-  .article-item {
-    display: flex;
-    gap: 1rem;
-    padding: 1.25rem 0;
-    border-bottom: 1px solid var(--color-border-light);
-    transition: opacity 0.2s;
+  .article-row {
+    border-bottom: 1px solid var(--border-light);
+    transition: background 0.15s;
   }
-  .article-item:last-child {
+  .article-row:last-child {
     border-bottom: none;
   }
-
-  .article-emoji {
-    font-size: 1.5rem;
-    line-height: 1.4;
-    flex-shrink: 0;
-    width: 2rem;
-    text-align: center;
-    padding-top: 0.1rem;
+  .article-row:hover {
+    background: var(--bg-elevated);
+    border-radius: 6px;
+    margin: 0 -0.75rem;
+    padding: 0 0.75rem;
   }
-
-  .article-content {
-    flex: 1;
-    min-width: 0;
+  .row-link {
+    display: block;
+    padding: 1.25rem 0;
+    text-decoration: none;
+    color: inherit;
   }
+  .row-link:hover { text-decoration: none; }
 
-  .article-category {
+  .row-category {
     font-size: 0.72rem;
     font-weight: 600;
-    color: var(--color-accent);
-    letter-spacing: 0.04em;
-    margin-bottom: 0.2rem;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    margin-bottom: 0.25rem;
   }
-
-  .article-title {
-    display: block;
+  .row-title {
     font-size: 1.05rem;
     font-weight: 600;
-    color: var(--color-text);
-    text-decoration: none;
-    line-height: 1.4;
-    margin-bottom: 0.3rem;
+    color: var(--text);
+    margin: 0 0 0.3rem;
+    line-height: 1.35;
     transition: color 0.15s;
   }
-  .article-title:hover {
-    color: var(--color-accent);
+  .article-row:hover .row-title {
+    color: var(--accent);
   }
-
-  .article-desc {
+  .row-desc {
     font-size: 0.88rem;
-    color: var(--color-text-muted);
-    line-height: 1.5;
-    margin-bottom: 0.3rem;
+    color: var(--text-secondary);
+    line-height: 1.45;
+    margin: 0 0 0.3rem;
   }
-
-  .article-meta {
+  .row-meta {
     font-size: 0.78rem;
-    color: var(--color-text-muted);
+    color: var(--text-muted);
   }
 
-  /* Filter animation */
-  .article-item.hidden {
+  .article-row.hidden {
     display: none;
   }
 </style>
 
 <script>
   (function() {
-    var filterBar = document.getElementById('filterBar');
-    var articles = document.querySelectorAll('.article-item');
+    var bar = document.getElementById('filterBar');
+    var articles = document.querySelectorAll('.article-row');
 
-    filterBar.addEventListener('click', function(e) {
+    bar.addEventListener('click', function(e) {
       var btn = e.target.closest('.filter-btn');
       if (!btn) return;
 
-      // Update active button
-      filterBar.querySelectorAll('.filter-btn').forEach(function(b) {
-        b.classList.remove('active');
-      });
+      bar.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
       btn.classList.add('active');
 
       var filter = btn.getAttribute('data-filter');
-
-      articles.forEach(function(article) {
-        if (filter === 'all' || article.getAttribute('data-category') === filter) {
-          article.classList.remove('hidden');
-        } else {
-          article.classList.add('hidden');
-        }
+      articles.forEach(function(a) {
+        a.classList.toggle('hidden', filter !== 'all' && a.getAttribute('data-category') !== filter);
       });
     });
   })();

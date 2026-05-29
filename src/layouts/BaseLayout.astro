@@ -2,9 +2,10 @@
 export interface Props {
   title: string;
   description?: string;
+  wide?: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, wide } = Astro.props;
 const currentPath = Astro.url.pathname;
 ---
 
@@ -17,146 +18,102 @@ const currentPath = Astro.url.pathname;
     <meta property="og:title" content={`${title} | 陈道雷`} />
     <meta property="og:description" content={description || '算力与电力协同、电力市场改革、新能源基础设施投资的深度分析与投资框架。'} />
     <meta property="og:type" content={currentPath.startsWith('/blog/') ? 'article' : 'website'} />
-    <meta property="og:url" content={`https://chendaolei.us.kg${currentPath}`} />
+    <meta property="og:url" content={`https://chendaolei-website.pages.dev${currentPath}`} />
     <meta property="og:site_name" content="陈道雷" />
     <meta property="og:locale" content="zh_CN" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={`${title} | 陈道雷`} />
-    <meta name="twitter:description" content={description || '算力与电力协同、电力市场改革、新能源基础设施投资的深度分析与投资框架。'} />
     <link rel="alternate" type="application/rss+xml" title="陈道雷 | RSS Feed" href="/rss.xml" />
     <title>{title} | 陈道雷</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <script>
-      // 自托管访问统计 (via Cloudflare Worker + KV)
-      (function() {
-        var p = location.pathname;
-        if (p.startsWith('/search') || p.startsWith('/pagefind')) return;
-        new Image().src = '/track?path=' + encodeURIComponent(p);
-      })();
-    </script>
     <style>
-      /* ============================================
-         Design System v2 — Light & Dark Modes
-         ============================================ */
+      /* ═══════════════════════════════════════════
+         Design System v3 — Apple-inspired Minimal
+         ═══════════════════════════════════════════ */
 
-      /* === Light Mode (default) === */
+      /* === Design Tokens === */
       :root {
-        --color-bg: #f4f5f9;
-        --color-bg-card: #ffffff;
-        --color-bg-elevated: #fafafe;
-        --color-text: #181826;
-        --color-text-secondary: #44445a;
-        --color-text-muted: #8888a0;
-        --color-primary: #1e3a5f;
-        --color-primary-light: #2d5a8a;
-        --color-accent: #0d9488;
-        --color-accent-light: #14b8a6;
-        --color-accent-bg: #f0fdfa;
-        --color-border: #e2e2ea;
-        --color-border-light: #eeedf2;
-        --color-nav-bg: rgba(244, 245, 249, 0.88);
-        --color-hero-decor: #0d9488;
-        --color-inline-code-bg: #edeef2;
-        --color-toc-bg: #edeef2;
-        --color-table-header: #edeef2;
-        --color-table-stripe: #f8f8fa;
-
-        --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
-        --shadow-card: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
-        --shadow-card-hover: 0 4px 14px rgba(0,0,0,0.06), 0 2px 4px rgba(0,0,0,0.04);
-        --shadow-elevated: 0 8px 30px rgba(0,0,0,0.06);
-
+        --bg: #fafafa;
+        --bg-card: #ffffff;
+        --bg-elevated: #f5f5f7;
+        --text: #1d1d1f;
+        --text-secondary: #6e6e73;
+        --text-muted: #aeaeb2;
+        --accent: #0066cc;
+        --accent-hover: #004499;
+        --accent-bg: rgba(0, 102, 204, 0.06);
+        --border: #d2d2d7;
+        --border-light: #e6e6ea;
+        --nav-bg: rgba(250, 250, 250, 0.82);
+        --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+        --shadow-card: 0 2px 8px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02);
+        --shadow-card-hover: 0 8px 24px rgba(0,0,0,0.06), 0 2px 6px rgba(0,0,0,0.03);
         --radius-sm: 6px;
-        --radius-card: 12px;
-        --radius-lg: 16px;
-
-        --max-width-content: 720px;
-        --max-width-wide: 800px;
-
-        font-synthesis: none;
-        text-rendering: optimizeLegibility;
+        --radius-card: 10px;
+        --max-w: 720px;
+        --max-w-wide: 1000px;
+        --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "PingFang SC", "Noto Sans SC", sans-serif;
+        --font-mono: "SF Mono", "Fira Code", monospace;
       }
 
-      /* === Dark Mode === */
       @media (prefers-color-scheme: dark) {
         :root {
-          --color-bg: #0c0c16;
-          --color-bg-card: #161622;
-          --color-bg-elevated: #1a1a28;
-          --color-text: #e2e2ea;
-          --color-text-secondary: #9a9aae;
-          --color-text-muted: #6a6a7e;
-          --color-primary: #6ba3d4;
-          --color-primary-light: #7fc0f0;
-          --color-accent: #34d399;
-          --color-accent-light: #5eead4;
-          --color-accent-bg: rgba(52, 211, 153, 0.08);
-          --color-border: #1e1e2e;
-          --color-border-light: #26263a;
-          --color-nav-bg: rgba(12, 12, 22, 0.88);
-          --color-hero-decor: #34d399;
-          --color-inline-code-bg: #1e1e2e;
-          --color-toc-bg: #1a1a28;
-          --color-table-header: #1a1a28;
-          --color-table-stripe: #12121e;
-
-          --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
-          --shadow-card: 0 1px 3px rgba(0,0,0,0.25), 0 1px 2px rgba(0,0,0,0.15);
-          --shadow-card-hover: 0 4px 14px rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.2);
-          --shadow-elevated: 0 8px 30px rgba(0,0,0,0.35);
+          --bg: #0a0a0a;
+          --bg-card: #141414;
+          --bg-elevated: #1a1a1a;
+          --text: #f5f5f7;
+          --text-secondary: #86868b;
+          --text-muted: #6e6e73;
+          --accent: #64a8f0;
+          --accent-hover: #8ac0ff;
+          --accent-bg: rgba(100, 168, 240, 0.08);
+          --border: #2d2d2d;
+          --border-light: #222;
+          --nav-bg: rgba(10, 10, 10, 0.82);
+          --shadow-sm: 0 1px 3px rgba(0,0,0,0.2);
+          --shadow-card: 0 2px 8px rgba(0,0,0,0.3);
+          --shadow-card-hover: 0 8px 24px rgba(0,0,0,0.4);
         }
       }
 
-      /* === Manual Dark Mode Toggle === */
       html.dark {
-        --color-bg: #0c0c16;
-        --color-bg-card: #161622;
-        --color-bg-elevated: #1a1a28;
-        --color-text: #e2e2ea;
-        --color-text-secondary: #9a9aae;
-        --color-text-muted: #6a6a7e;
-        --color-primary: #6ba3d4;
-        --color-primary-light: #7fc0f0;
-        --color-accent: #34d399;
-        --color-accent-light: #5eead4;
-        --color-accent-bg: rgba(52, 211, 153, 0.08);
-        --color-border: #1e1e2e;
-        --color-border-light: #26263a;
-        --color-nav-bg: rgba(12, 12, 22, 0.88);
-        --color-hero-decor: #34d399;
-        --color-inline-code-bg: #1e1e2e;
-        --color-toc-bg: #1a1a28;
-        --color-table-header: #1a1a28;
-        --color-table-stripe: #12121e;
-
-        --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
-        --shadow-card: 0 1px 3px rgba(0,0,0,0.25), 0 1px 2px rgba(0,0,0,0.15);
-        --shadow-card-hover: 0 4px 14px rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.2);
-        --shadow-elevated: 0 8px 30px rgba(0,0,0,0.35);
+        --bg: #0a0a0a;
+        --bg-card: #141414;
+        --bg-elevated: #1a1a1a;
+        --text: #f5f5f7;
+        --text-secondary: #86868b;
+        --text-muted: #6e6e73;
+        --accent: #64a8f0;
+        --accent-hover: #8ac0ff;
+        --accent-bg: rgba(100, 168, 240, 0.08);
+        --border: #2d2d2d;
+        --border-light: #222;
+        --nav-bg: rgba(10, 10, 10, 0.82);
+        --shadow-sm: 0 1px 3px rgba(0,0,0,0.2);
+        --shadow-card: 0 2px 8px rgba(0,0,0,0.3);
+        --shadow-card-hover: 0 8px 24px rgba(0,0,0,0.4);
       }
 
-      /* === Reset & Base === */
+      /* === Reset === */
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-      html { font-size: 18px; scroll-behavior: smooth; }
+      html { font-size: 17px; scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
       body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
-        color: var(--color-text);
-        background: var(--color-bg);
-        line-height: 1.7;
+        font-family: var(--font-sans);
+        color: var(--text);
+        background: var(--bg);
+        line-height: 1.65;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        background-image:
-          radial-gradient(ellipse at 50% 0%, color-mix(in srgb, var(--color-accent) 4%, transparent) 0%, transparent 60%),
-          repeating-linear-gradient(0deg, transparent, transparent 40px, var(--color-border-light) 40px, var(--color-border-light) 40.5px, transparent 40.5px, transparent 80px);
-        background-attachment: fixed;
-        min-height: 100vh;
         transition: background 0.3s, color 0.3s;
+        min-height: 100vh;
       }
 
-      /* === Reading Progress Bar === */
+      /* === Selection === */
+      ::selection { background: var(--accent); color: #fff; }
+
+      /* === Reading Progress === */
       #reading-progress {
-        position: fixed; top: 0; left: 0; height: 3px;
-        background: linear-gradient(90deg, var(--color-accent), var(--color-accent-light));
+        position: fixed; top: 0; left: 0; height: 2px;
+        background: var(--accent);
         z-index: 200;
         width: 0%;
         transition: width 0.05s linear;
@@ -166,266 +123,193 @@ const currentPath = Astro.url.pathname;
       /* === Navigation === */
       nav {
         position: sticky; top: 0; z-index: 100;
-        background: var(--color-nav-bg);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border-bottom: 1px solid var(--color-border);
-        transition: background 0.3s;
+        background: var(--nav-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--border-light);
+        transition: background 0.3s, border-color 0.3s;
       }
-      nav .inner {
-        max-width: var(--max-width-wide); margin: 0 auto;
-        display: flex; align-items: center; gap: 0.5rem;
-        padding: 0 1.5rem; height: 56px;
+      .nav-inner {
+        max-width: var(--max-w-wide); margin: 0 auto;
+        display: flex; align-items: center;
+        padding: 0 2rem; height: 48px;
+        gap: 0.5rem;
       }
-      nav .logo {
-        font-weight: 750; font-size: 1.1rem;
-        color: var(--color-text); text-decoration: none;
-        letter-spacing: -0.02em;
-        transition: opacity 0.2s, color 0.2s;
+      .nav-logo {
+        font-weight: 600; font-size: 0.95rem;
+        color: var(--text); text-decoration: none;
+        letter-spacing: -0.01em;
+        transition: opacity 0.2s;
       }
-      nav .logo:hover { opacity: 0.7; }
-      nav .links { display: flex; gap: 1.5rem; align-items: center; }
-      nav .spacer { flex: 1; }
-      nav .links a {
-        text-decoration: none; color: var(--color-text-muted);
-        font-size: 0.9rem; font-weight: 500;
-        position: relative; padding: 0.25rem 0;
+      .nav-logo:hover { opacity: 0.65; text-decoration: none; }
+      .nav-spacer { flex: 1; }
+      .nav-links { display: flex; gap: 1.75rem; align-items: center; }
+      .nav-links a {
+        text-decoration: none; color: var(--text-muted);
+        font-size: 0.82rem; font-weight: 500;
+        padding: 0.2rem 0;
         transition: color 0.2s;
+        position: relative;
       }
-      nav .links a:hover { color: var(--color-accent); }
-      nav .links a.active { color: var(--color-accent); }
-      nav .links a.active::after {
+      .nav-links a:hover { color: var(--accent); }
+      .nav-links a.active { color: var(--text); }
+      .nav-links a.active::after {
         content: '';
-        position: absolute; bottom: -2px; left: 0; right: 0;
-        height: 2px; background: var(--color-accent);
+        position: absolute; bottom: -1px; left: 0; right: 0;
+        height: 1.5px; background: var(--accent);
         border-radius: 1px;
       }
 
-      /* === Search Button === */
-      .search-btn {
-        background: none; border: 1px solid var(--color-border);
-        border-radius: 6px;
-        width: 34px; height: 34px;
+      .nav-actions { display: flex; align-items: center; gap: 0.4rem; margin-left: 1.25rem; }
+      .nav-btn {
+        background: none; border: none;
+        width: 30px; height: 30px;
         display: flex; align-items: center; justify-content: center;
         cursor: pointer;
-        color: var(--color-text-muted);
+        color: var(--text-muted);
         font-size: 0.85rem;
-        text-decoration: none;
-        transition: all 0.2s;
-        line-height: 1;
-      }
-      .search-btn:hover {
-        border-color: var(--color-accent);
-        color: var(--color-accent);
-        background: var(--color-accent-bg);
-        text-decoration: none;
-      }
-
-      /* === Dark Mode Toggle === */
-      .theme-toggle {
-        background: none; border: 1px solid var(--color-border);
         border-radius: 6px;
-        width: 34px; height: 34px;
-        display: flex; align-items: center; justify-content: center;
-        cursor: pointer;
-        color: var(--color-text-muted);
-        font-size: 1rem;
         transition: all 0.2s;
-        margin-left: 0.75rem;
+        text-decoration: none;
         line-height: 1;
-        padding: 0;
       }
-      .theme-toggle:hover {
-        border-color: var(--color-accent);
-        color: var(--color-accent);
-        background: var(--color-accent-bg);
+      .nav-btn:hover {
+        background: var(--accent-bg);
+        color: var(--accent);
+        text-decoration: none;
       }
-      .theme-toggle .icon-light,
-      .theme-toggle .icon-dark {
-        transition: opacity 0.2s, transform 0.2s;
-      }
-      html.dark .theme-toggle .icon-light,
-      .theme-toggle .icon-dark { display: none; }
-      html.dark .theme-toggle .icon-dark { display: inline; }
 
-      /* === Main Content === */
+      /* === Main === */
       main {
-        max-width: var(--max-width-content); margin: 0 auto;
-        padding: 3rem 1.5rem 5rem;
+        max-width: var(--max-w);
+        margin: 0 auto;
+        padding: 4rem 2rem 6rem;
+      }
+      main.wide {
+        max-width: var(--max-w-wide);
       }
 
       /* === Typography === */
-      h1 { font-size: 2.2rem; font-weight: 750; line-height: 1.25; letter-spacing: -0.03em; margin-bottom: 0.5rem; color: var(--color-primary); }
-      h2 { font-size: 1.5rem; font-weight: 650; line-height: 1.3; margin-top: 2.5rem; margin-bottom: 0.75rem; color: var(--color-text); }
-      h3 { font-size: 1.15rem; font-weight: 600; margin-top: 1.75rem; margin-bottom: 0.5rem; color: var(--color-text); }
+      h1 { font-size: 2.8rem; font-weight: 700; line-height: 1.15; letter-spacing: -0.03em; margin-bottom: 0.75rem; color: var(--text); }
+      h2 { font-size: 1.7rem; font-weight: 650; line-height: 1.25; margin-top: 2.5rem; margin-bottom: 0.6rem; letter-spacing: -0.01em; color: var(--text); }
+      h3 { font-size: 1.2rem; font-weight: 600; margin-top: 1.75rem; margin-bottom: 0.4rem; color: var(--text); }
       h2 a.anchor, h3 a.anchor {
-        text-decoration: none; color: var(--color-accent);
+        text-decoration: none; color: var(--accent);
         opacity: 0; transition: opacity 0.15s;
-        font-weight: 400; margin-left: 0.25rem;
+        font-weight: 400; margin-left: 0.2rem;
+        font-size: 0.85em;
       }
       h2:hover a.anchor, h3:hover a.anchor { opacity: 1; }
-      p { margin-bottom: 1.2rem; }
-      p, li { color: var(--color-text-secondary); }
+      p { margin-bottom: 1.2rem; color: var(--text-secondary); }
+      strong { color: var(--text); font-weight: 600; }
+      a { color: var(--accent); text-decoration: none; transition: color 0.15s; }
+      a:hover { color: var(--accent-hover); }
 
-      a { color: var(--color-accent); text-decoration: none; transition: color 0.15s; }
-      a:hover { color: var(--color-accent-light); text-decoration: underline; }
-
-      ::selection {
-        background: var(--color-accent);
-        color: #fff;
-      }
-
-      ul, ol { padding-left: 1.25rem; margin-bottom: 1.2rem; }
-      li { margin-bottom: 0.3rem; }
+      ul, ol { padding-left: 1.35rem; margin-bottom: 1.2rem; }
+      li { margin-bottom: 0.3rem; color: var(--text-secondary); }
 
       blockquote {
-        border-left: 3px solid var(--color-accent);
-        padding: 0.75rem 1rem;
+        border-left: 2px solid var(--accent);
+        padding: 0.75rem 1.25rem;
         margin: 1.5rem 0;
-        background: var(--color-accent-bg);
+        background: var(--accent-bg);
         border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-        color: var(--color-text-secondary);
+        color: var(--text-secondary);
         font-style: normal;
       }
       blockquote p { margin-bottom: 0; }
 
       hr {
-        border: none; border-top: 1px solid var(--color-border);
-        margin: 2.5rem 0;
+        border: none; border-top: 1px solid var(--border-light);
+        margin: 3rem 0;
       }
 
       /* === Code === */
       code {
-        font-family: "SF Mono", "Fira Code", "JetBrains Mono", monospace;
-        font-size: 0.85rem;
-        background: var(--color-inline-code-bg);
+        font-family: var(--font-mono);
+        font-size: 0.82rem;
+        background: var(--bg-elevated);
         padding: 0.15em 0.4em;
         border-radius: 4px;
-        color: var(--color-text);
+        color: var(--text);
       }
       pre {
-        background: var(--color-bg-elevated);
-        color: var(--color-text);
-        border: 1px solid var(--color-border);
-        padding: 1rem 1.25rem; border-radius: 8px;
-        overflow-x: auto; margin: 1.5rem 0;
-        font-size: 0.82rem;
-        line-height: 1.5;
-        position: relative;
+        background: var(--bg-elevated);
+        color: var(--text);
+        border: 1px solid var(--border-light);
+        padding: 1.25rem 1.5rem;
+        border-radius: 8px;
+        overflow-x: auto;
+        margin: 1.5rem 0;
+        font-size: 0.8rem;
+        line-height: 1.55;
       }
-      pre code {
-        background: none; padding: 0; color: inherit;
-        font-size: inherit;
-      }
+      pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
 
       /* === Tables === */
       table {
         width: 100%; border-collapse: collapse;
-        margin: 1.5rem 0; font-size: 0.9rem;
+        margin: 1.5rem 0; font-size: 0.88rem;
       }
       th, td {
-        border: 1px solid var(--color-border);
+        border: 1px solid var(--border-light);
         padding: 0.5rem 0.75rem; text-align: left;
       }
-      th { background: var(--color-table-header); font-weight: 600; color: var(--color-text); }
-      tr:nth-child(even) { background: var(--color-table-stripe); }
+      th { background: var(--bg-elevated); font-weight: 600; color: var(--text); }
+      tr:nth-child(even) { background: var(--bg); }
 
       /* === Article Meta === */
       .article-meta {
-        font-size: 0.85rem; color: var(--color-text-muted);
+        font-size: 0.85rem; color: var(--text-muted);
         margin-bottom: 2rem;
         display: flex; gap: 1rem; flex-wrap: wrap;
       }
-      .article-meta span { display: inline-flex; align-items: center; gap: 0.3rem; }
 
       /* === Tags === */
       .tags { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
       .tag {
-        background: var(--color-accent-bg); color: var(--color-accent);
-        padding: 0.15rem 0.7rem; border-radius: 12px;
-        font-size: 0.78rem; font-weight: 500;
-        border: 1px solid color-mix(in srgb, var(--color-accent) 20%, transparent);
+        background: var(--accent-bg); color: var(--accent);
+        padding: 0.15rem 0.65rem; border-radius: 12px;
+        font-size: 0.76rem; font-weight: 500;
+        border: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
       }
 
       /* === Back link === */
       .back-link {
         display: inline-flex; align-items: center; gap: 0.3rem;
-        font-size: 0.9rem; color: var(--color-text-muted); margin-bottom: 2rem;
+        font-size: 0.85rem; color: var(--text-muted); margin-bottom: 2.5rem;
       }
-      .back-link:hover { color: var(--color-accent); text-decoration: none; }
+      .back-link:hover { color: var(--accent); text-decoration: none; }
 
       /* === Footer === */
       footer {
-        border-top: 1px solid var(--color-border);
-        padding: 2.5rem 1.5rem;
+        border-top: 1px solid var(--border-light);
+        padding: 3rem 2rem;
         text-align: center;
-        color: var(--color-text-muted); font-size: 0.82rem;
+        color: var(--text-muted);
+        font-size: 0.8rem;
         transition: border-color 0.3s;
       }
-      footer a { color: var(--color-text-muted); }
-      footer a:hover { color: var(--color-accent); }
+      footer a { color: var(--text-muted); }
+      footer a:hover { color: var(--accent); text-decoration: none; }
+      footer .footer-heart { color: var(--accent); }
 
       /* === Responsive === */
       @media (max-width: 640px) {
-        html { font-size: 16px; }
-        main { padding: 2rem 1.25rem 4rem; }
-        h1 { font-size: 1.8rem; }
-        h2 { font-size: 1.3rem; }
-        nav .inner { padding: 0 1rem; }
-        nav .links { gap: 1rem; }
-        .article-card-grid { grid-template-columns: 1fr; }
-      }
-
-      /* === Homepage Hero === */
-      .hero {
-        margin-bottom: 3rem;
-        position: relative;
-      }
-      .hero-bg-decor {
-        position: absolute;
-        top: -40px; right: -40px;
-        width: 260px; height: 260px;
-        pointer-events: none;
-        z-index: 0;
-        color: var(--color-hero-decor);
-        transition: color 0.3s;
-      }
-      .hero-bg-decor svg { width: 100%; height: 100%; }
-      .hero-content { position: relative; z-index: 1; }
-      .hero h1 { font-size: 2.5rem; margin-bottom: 0.75rem; color: var(--color-primary); }
-      .hero .subtitle {
-        font-size: 1.1rem; color: var(--color-text-secondary);
-        line-height: 1.6; margin-bottom: 1.5rem;
-        max-width: 580px;
-      }
-      .hero .subtitle strong { color: var(--color-text); }
-      .hero .cta {
-        display: inline-flex; align-items: center; gap: 0.5rem;
-        background: var(--color-primary); color: #fff;
-        padding: 0.6rem 1.5rem; border-radius: 8px;
-        font-size: 0.9rem; font-weight: 600;
-        text-decoration: none; transition: all 0.2s;
-      }
-      .hero .cta:hover { background: var(--color-accent); text-decoration: none; transform: translateY(-1px); }
-
-      /* === Category Heading === */
-      .category-heading {
-        font-size: 1rem; font-weight: 650;
-        color: var(--color-accent);
-        margin-top: 2rem; margin-bottom: 0.75rem;
-        display: flex; align-items: center; gap: 0.5rem;
-      }
-      .category-heading::after {
-        content: '';
-        flex: 1; height: 1px;
-        background: linear-gradient(90deg, var(--color-accent), transparent);
-        opacity: 0.3;
+        html { font-size: 15px; }
+        main { padding: 2.5rem 1.25rem 4rem; }
+        main.wide { padding: 2.5rem 1.25rem 4rem; }
+        h1 { font-size: 2rem; }
+        h2 { font-size: 1.35rem; }
+        .nav-inner { padding: 0 1rem; }
+        .nav-links { gap: 1.25rem; }
+        footer { padding: 2rem 1.25rem; }
       }
     </style>
   </head>
   <body>
     <script>
-      // Dark mode initialization (before paint to avoid flash)
+      // Dark mode init (before paint)
       (function() {
         var saved = localStorage.getItem('theme');
         var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -435,35 +319,39 @@ const currentPath = Astro.url.pathname;
       })();
     </script>
 
-    {currentPath.startsWith('/blog/') && <div id="reading-progress"></div>}
+    {currentPath.startsWith('/blog/') && currentPath !== '/blog' && <div id="reading-progress"></div>}
     <nav>
-      <div class="inner">
-        <a href="/" class="logo">陈道雷</a>
-        <div class="spacer"></div>
-        <div class="links">
+      <div class="nav-inner">
+        <a href="/" class="nav-logo">陈道雷</a>
+        <div class="nav-spacer"></div>
+        <div class="nav-links">
           <a href="/" class={currentPath === '/' ? 'active' : ''}>首页</a>
           <a href="/about" class={currentPath === '/about' ? 'active' : ''}>关于</a>
-          <a href="/blog" class={currentPath.startsWith('/blog') ? 'active' : ''}>文章</a>
+          <a href="/blog" class={currentPath.startsWith('/blog') && currentPath !== '/' ? 'active' : ''}>文章</a>
           <a href="/projects" class={currentPath === '/projects' ? 'active' : ''}>作品</a>
         </div>
-        <a href="/search" class="search-btn" aria-label="搜索">🔍</a>
-        <button class="theme-toggle" id="themeToggle" aria-label="切换暗色模式">
-          <span class="icon-light">☀</span>
-          <span class="icon-dark">☾</span>
-        </button>
+        <div class="nav-actions">
+          <a href="/search" class="nav-btn" aria-label="搜索">⌕</a>
+          <button class="nav-btn theme-toggle" id="themeToggle" aria-label="切换暗色模式">
+            <span class="icon-light" style="display:inline">☀</span>
+            <span class="icon-dark" style="display:none">☾</span>
+          </button>
+        </div>
       </div>
     </nav>
 
-    <main>
+    <main class={wide ? 'wide' : ''}>
       <slot />
     </main>
 
     <footer>
-      <p>© {new Date().getFullYear()} 陈道雷 · 用 ❤ 和 ⚡ 构建</p>
-      <p style="margin-top: 0.3rem;">
-        <a href="/rss.xml" target="_blank" rel="noopener">RSS</a>
-        · <a href="https://cloudflare.com" target="_blank" rel="noopener">Cloudflare Pages</a>
-        · <a href="https://astro.build" target="_blank" rel="noopener">Astro</a>
+      <p style="margin-bottom: 0.3rem;">© {new Date().getFullYear()} 陈道雷 · <span class="footer-heart">❤</span> + ⚡</p>
+      <p>
+        <a href="/rss.xml">RSS</a>
+        <span style="margin: 0 0.4rem; color: var(--border-light);">·</span>
+        <a href="https://github.com/David-Chen1977">GitHub</a>
+        <span style="margin: 0 0.4rem; color: var(--border-light);">·</span>
+        <a href="https://chendaolei-website.pages.dev">chendaolei-website.pages.dev</a>
       </p>
     </footer>
 
@@ -479,27 +367,43 @@ const currentPath = Astro.url.pathname;
           html.classList.add('dark');
           localStorage.setItem('theme', 'dark');
         }
+        // Update icons
+        document.querySelectorAll('.icon-light, .icon-dark').forEach(function(el) {
+          el.style.display = html.classList.contains('dark')
+            ? (el.classList.contains('icon-dark') ? 'inline' : 'none')
+            : (el.classList.contains('icon-light') ? 'inline' : 'none');
+        });
       });
 
-      // Reading progress + TOC (blog pages)
+      // Sync toggle icon on load
+      (function() {
+        var isDark = document.documentElement.classList.contains('dark');
+        document.querySelectorAll('.icon-light, .icon-dark').forEach(function(el) {
+          el.style.display = isDark
+            ? (el.classList.contains('icon-dark') ? 'inline' : 'none')
+            : (el.classList.contains('icon-light') ? 'inline' : 'none');
+        });
+      })();
+
+      // Reading progress
       {currentPath.startsWith('/blog/') && (
         function() {
-          // Reading progress bar
           var bar = document.getElementById('reading-progress');
-          if (bar) {
-            var winHeight = window.innerHeight;
-            var docHeight = document.documentElement.scrollHeight;
-            var maxScroll = docHeight - winHeight;
-            function updateBar() {
-              var scrolled = window.scrollY;
-              var pct = maxScroll > 0 ? (scrolled / maxScroll) * 100 : 0;
-              bar.style.width = pct + '%';
-            }
-            window.addEventListener('scroll', updateBar, { passive: true });
-            updateBar();
+          if (!bar) return;
+          var win = window;
+          function update() {
+            var scrolled = win.scrollY;
+            var maxScroll = document.documentElement.scrollHeight - win.innerHeight;
+            bar.style.width = maxScroll > 0 ? (scrolled / maxScroll * 100) + '%' : '0%';
           }
+          win.addEventListener('scroll', update, { passive: true });
+          update();
+        }
+      )()}
 
-          // Auto-generate TOC and anchor links
+      // Auto-generate heading anchors + inline TOC
+      {currentPath.startsWith('/blog/') && (
+        function() {
           var headings = document.querySelectorAll('h2, h3');
           headings.forEach(function(h) {
             if (!h.id) {
@@ -512,40 +416,38 @@ const currentPath = Astro.url.pathname;
             h.appendChild(anchor);
           });
 
-          // Build inline TOC from h2/h3
+          // Inline TOC
           var h2s = document.querySelectorAll('h2');
           if (h2s.length >= 2) {
-            var tocDiv = document.createElement('div');
-            tocDiv.className = 'article-toc';
-            var tocLabel = document.createElement('div');
-            tocLabel.className = 'toc-label';
-            tocLabel.textContent = '目录';
-            tocDiv.appendChild(tocLabel);
+            var toc = document.createElement('div');
+            toc.style.cssText = 'margin: 1.5rem 0 2.5rem; padding: 1rem 1.25rem; background: var(--bg-elevated); border-radius: var(--radius-sm); border: 1px solid var(--border-light);';
+            var label = document.createElement('div');
+            label.style.cssText = 'font-size: 0.78rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.06em;';
+            label.textContent = '目录';
+            toc.appendChild(label);
 
-            var main = document.querySelector('main');
-            var firstH2 = h2s[0];
-
-            var tocItems = [];
+            var items = [];
             h2s.forEach(function(h2) {
-              tocItems.push({ el: h2, tag: 'h2' });
+              items.push({ el: h2, tag: 'h2' });
               var next = h2.nextElementSibling;
               while (next && next.tagName !== 'H2') {
-                if (next.tagName === 'H3') {
-                  tocItems.push({ el: next, tag: 'h3' });
-                }
+                if (next.tagName === 'H3') items.push({ el: next, tag: 'h3' });
                 next = next.nextElementSibling;
               }
             });
 
-            tocItems.forEach(function(item) {
+            items.forEach(function(item) {
               var link = document.createElement('a');
               link.href = '#' + item.el.id;
-              link.className = 'toc-' + item.tag;
+              link.style.cssText = 'display: block; font-size: ' + (item.tag === 'h3' ? '0.82rem' : '0.9rem') + '; padding: 0.2rem 0; color: var(--text-secondary);' + (item.tag === 'h3' ? ' padding-left: 1rem;' : '') + ' text-decoration: none; transition: color 0.15s;';
               link.textContent = item.el.textContent.replace(/#$/, '').trim();
-              tocDiv.appendChild(link);
+              link.addEventListener('mouseenter', function() { this.style.color = 'var(--accent)'; });
+              link.addEventListener('mouseleave', function() { this.style.color = ''; });
+              toc.appendChild(link);
             });
 
-            main.insertBefore(tocDiv, firstH2);
+            var main = document.querySelector('main');
+            main.insertBefore(toc, h2s[0]);
           }
         }
       )()}
