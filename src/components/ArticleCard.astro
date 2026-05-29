@@ -1,0 +1,106 @@
+---
+export interface Props {
+  slug: string;
+  title: string;
+  desc: string;
+  date: string;
+  readTime: string;
+  tag: string;
+}
+
+const { slug, title, desc, date, readTime, tag } = Astro.props;
+
+// 按分类分配渐变色和图标
+const coverConfig: Record<string, { gradient: string; icon: string }> = {
+  '政策解读': { gradient: 'linear-gradient(135deg, #1e3a5f 0%, #2d6a9f 100%)', icon: '📋' },
+  '算电协同': { gradient: 'linear-gradient(135deg, #0d4f4a 0%, #0d9488 100%)', icon: '⚡' },
+  '投资方法论': { gradient: 'linear-gradient(135deg, #4a1a6b 0%, #7c3aed 100%)', icon: '📊' },
+  'AI 协作': { gradient: 'linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%)', icon: '🤖' },
+};
+const cfg = coverConfig[tag] || { gradient: 'linear-gradient(135deg, #333 0%, #666 100%)', icon: '📄' };
+---
+
+<li class="article-card">
+  <div class="card-cover" style={`background: ${cfg.gradient};`}>
+    <span class="card-cover-icon">{cfg.icon}</span>
+  </div>
+  <div class="card-body">
+    <span class="card-tag">{tag}</span>
+    <a href={`/blog/${slug}`} class="card-title">{title}</a>
+    <div class="card-desc">{desc}</div>
+    <div class="card-meta">{date} · {readTime}</div>
+  </div>
+</li>
+
+<style>
+  .article-card {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    transition: all 0.25s ease;
+    box-shadow: var(--shadow-card);
+  }
+  .article-card:hover {
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-2px);
+    border-color: var(--color-border);
+  }
+  .card-cover {
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .card-cover::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.08) 0%, transparent 60%);
+  }
+  .card-cover-icon {
+    font-size: 1.8rem;
+    opacity: 0.6;
+    filter: saturate(0.8);
+    position: relative;
+    z-index: 1;
+  }
+  .card-body {
+    padding: 1rem 1.25rem 1.25rem;
+  }
+  .card-tag {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    letter-spacing: 0.04em;
+    margin-bottom: 0.4rem;
+  }
+  a.card-title {
+    display: block;
+    font-size: 1.05rem;
+    font-weight: 650;
+    color: var(--color-text);
+    text-decoration: none;
+    line-height: 1.4;
+    margin-bottom: 0.4rem;
+    transition: color 0.15s;
+  }
+  a.card-title:hover { color: var(--color-accent); }
+  .card-desc {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .card-meta {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    margin-top: 0.5rem;
+  }
+</style>

@@ -1,0 +1,86 @@
+---
+export interface Props {
+  currentSlug: string;
+  category: string;
+}
+
+const { currentSlug, category } = Astro.props;
+
+interface Article {
+  slug: string;
+  title: string;
+  category: string;
+}
+
+const allArticles: Article[] = [
+  { slug: 'liu-zhang-wang-deep', title: '六张网规划实施方案深度解读', category: '政策解读' },
+  { slug: 'liu-zhang-wang', title: '>7万亿！六张网同时开建，这波基建红利对普通人意味着什么？', category: '政策解读' },
+  { slug: 'suan-dian-xie-tong-2', title: '算电协同产业链拆解：利润池在哪里？', category: '算电协同' },
+  { slug: 'suan-dian-xie-tong-1', title: '算电协同：为什么这是未来五年确定性很高的投资主题', category: '算电协同' },
+  { slug: 'impossible-triangle', title: '不可能铁三角与战略分层定价：华为思路对投资的启示', category: '投资方法论' },
+  { slug: 'ppt-quality-lessons', title: 'PPT 布局质量迭代：从 57 个问题到零缺陷', category: 'AI 协作' },
+];
+
+const related = allArticles.filter(a => a.category === category && a.slug !== currentSlug);
+---
+
+{related.length > 0 && (
+  <div class="related-section">
+    <hr />
+    <h2 class="related-heading">相关文章</h2>
+    <div class="related-list">
+      {related.map(a => (
+        <a href={`/blog/${a.slug}`} class="related-item">
+          <span class="related-category">{a.category}</span>
+          <span class="related-title">{a.title}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+)}
+
+<style>
+  .related-section {
+    margin-top: 2rem;
+  }
+  .related-heading {
+    font-size: 1.1rem;
+    font-weight: 650;
+    margin: 1.5rem 0 1rem;
+    color: var(--color-text);
+  }
+  .related-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .related-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.75rem 1rem;
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .related-item:hover {
+    border-color: var(--color-accent);
+    background: var(--color-accent-bg);
+    text-decoration: none;
+  }
+  .related-category {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--color-accent);
+  }
+  .related-title {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    line-height: 1.4;
+  }
+  .related-item:hover .related-title {
+    color: var(--color-accent);
+  }
+</style>
