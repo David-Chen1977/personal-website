@@ -1,0 +1,10 @@
+{
+  "name": "chendaolei-website",
+  "pages_build_output_dir": "dist",
+  "kv_namespaces": [
+    {
+      "binding": "page_views",
+      "id": "3ceda4395f794be08d2afb9a2c839665"
+    }
+  ]
+}

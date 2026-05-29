@@ -5,10 +5,16 @@
   "description": "个人专业网站 — 算电协同 · 电力交易 · 新能源",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && npx pagefind --site dist",
     "preview": "astro preview"
   },
   "dependencies": {
+    "@astrojs/rss": "^4.0.18",
+    "@astrojs/sitemap": "^3.7.3",
+    "@pagefind/default-ui": "^1.5.2",
     "astro": "^5.0.0"
+  },
+  "devDependencies": {
+    "pagefind": "^1.5.2"
   }
 }
