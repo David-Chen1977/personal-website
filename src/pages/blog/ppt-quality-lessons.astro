@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import RelatedArticles from '../../components/RelatedArticles.astro';
 ---
 
 <BaseLayout title="PPT 布局质量迭代：从 57 个问题到零缺陷" description="用 python-pptx 自动生成投资报告 PPT 的过程中遇到的布局溢出、重叠问题及其系统化修复方法。">
@@ -72,4 +73,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     <li>间距是否在合理范围内</li>
   </ul>
   <p>从此，每次生成的 PPT 不再需要人工逐页检查布局问题。</p>
+
+<RelatedArticles currentSlug="ppt-quality-lessons" category="AI 协作" />
 </BaseLayout>
