@@ -1,49 +1,195 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const categories = ['政策解读', '算电协同', '电力交易', '新能源', '虚拟电厂', 'AI+电力', '售电公司', '投资方法论', 'AI 协作'];
+
+interface Article {
+  slug: string;
+  title: string;
+  desc: string;
+  date: string;
+  readTime: string;
+  category: string;
+  emoji: string;
+}
+
+const articles: Article[] = [
+  { slug: 'suan-dian-xie-tong-deep-analysis', title: '算电协同深度分析：当算力遇上电力的结构性机会', desc: '底层逻辑从"电随算动"到"算随电动"，五大落地模式与四条投资主线的全面拆解。2026-2027是最佳布局期。', date: '2026-05-29', readTime: '约 12 分钟', category: '算电协同', emoji: '⚡' },
+  { slug: 'suan-dian-xie-tong-AI', title: '算电协同：AI 下半场，电比芯片更稀缺', desc: '算力遇到电力瓶颈，中美两套体制给出了完全不同的应对逻辑。三层投资优先级和六个商业模式拆解。', date: '2026-05-28', readTime: '约 10 分钟', category: '算电协同', emoji: '⚡' },
+  { slug: 'liu-zhang-wang-deep', title: '六张网规划实施方案深度解读：7万亿投资的底层逻辑与投资主线', desc: '从政治局定调到发改委落地，六张网的投资逻辑、产业链拆解、多网协同效应与时间窗口。', date: '2026-05-25', readTime: '约 15 分钟', category: '政策解读', emoji: '📋' },
+  { slug: 'liu-zhang-wang', title: '>7万亿！六张网同时开建，这波基建红利对普通人意味着什么？', desc: '政治局定调、发改委落地——六张网不是重复建设，是"组网"。七个投资方向和一个算电协同的单独机会。', date: '2026-05-22', readTime: '约 6 分钟', category: '政策解读', emoji: '📋' },
+  { slug: 'suan-dian-xie-tong-2', title: '算电协同产业链拆解：利润池在哪里？', desc: '上游绿电供给、中游智算基建、下游算力服务——三层的利润分布、竞争格局和卡位策略。', date: '2026-05-18', readTime: '约 10 分钟', category: '算电协同', emoji: '⚡' },
+  { slug: 'suan-dian-xie-tong-1', title: '算电协同：为什么这是未来五年确定性很高的投资主题', desc: 'AI 算力集群用电已进入 500MW 级，算力正在成为新的电力需求。算电协同首次进入政府工作报告。', date: '2026-05-15', readTime: '约 8 分钟', category: '算电协同', emoji: '⚡' },
+  { slug: 'impossible-triangle', title: '不可能铁三角与战略分层定价：华为思路对投资的启示', desc: '质量、成本、低价不可兼得。华为的解法不是三选二，而是市场分层。对基础设施投资的启示。', date: '2026-05-12', readTime: '约 5 分钟', category: '投资方法论', emoji: '📊' },
+  { slug: 'ppt-quality-lessons', title: 'PPT 布局质量迭代：从 57 个问题到零缺陷', desc: '用 python-pptx 自动生成投资报告 PPT 的过程中遇到的布局问题及其系统化修复方法。', date: '2026-05-10', readTime: '约 5 分钟', category: 'AI 协作', emoji: '🤖' },
+  { slug: 'dian-li-xian-huo-di-ceng-luo-ji', title: '电力现货交易底层逻辑及核心竞争力', desc: '五大关键维度拆解电力现货交易的核心竞争力：预测能力、交易策略、风险管理、技术系统与资源整合。', date: '2025-08-11', readTime: '约 8 分钟', category: '电力交易', emoji: '⚡' },
+  { slug: 'zhi-neng-ti-dian-wang', title: '智能体电网：虚拟电厂的终极革命', desc: '分布式自治如何重构14亿人的用电安全——从神经科学启示到Agent Grid架构，虚拟电厂的代际进化。', date: '2025-07-17', readTime: '约 7 分钟', category: '虚拟电厂', emoji: '🔌' },
+  { slug: 'ya-zhou-li-yao-dai', title: '"亚洲锂腰带"横空出世：中国如何重塑全球新能源权力版图', desc: '横跨川青藏新的亚洲锂腰带已探明锂资源超3000万吨，中国锂资源储量跃居全球第二。', date: '2025-09-11', readTime: '约 5 分钟', category: '新能源', emoji: '🌱' },
+  { slug: 'AI-miao-sha-xian-huo', title: 'AI秒杀现货交易！电力市场惊现12%收益暴增', desc: 'LSTM、强化学习、NLP——AI正化身电力现货交易的核心引擎，从预测到风控再到交易决策全面重构市场逻辑。', date: '2025-06-21', readTime: '约 5 分钟', category: 'AI+电力', emoji: '🤖' },
+  { slug: 'guang-chu-chong-yi-ti-hua', title: '光储充一体化：新能源时代电力系统的"破局之钥"', desc: '光伏、储能、充电三大模块通过集成释放系统级价值，重构电力系统基因的进化之路。', date: '2025-06-14', readTime: '约 5 分钟', category: '新能源', emoji: '🌱' },
+  { slug: 'shou-dian-gong-si-sheng-cun-zhi-nan', title: '2025年售电公司生存指南：三类公司如何强行续命？', desc: '电改57号文后售电行业大洗牌，三类公司存活路线：变身电力美团、绑定新能源巨头、抢占碳数据入口。', date: '2025-06-10', readTime: '约 4 分钟', category: '售电公司', emoji: '💼' },
+  { slug: 'huo-dian-ling-huo-xing-gai-zao', title: '电力现货市场新规落地，火电灵活性改造迎风口', desc: '现货电价波动加大是确定性趋势，火电调峰价值正在重估，储能和新能源市场化收益提升。', date: '2026-02-28', readTime: '约 3 分钟', category: '电力交易', emoji: '⚡' },
+  { slug: 'zu-he-tou-zi-yin-zi-tou-zi', title: '组合投资和因子投资对房地产投资策略的启示', desc: '永久组合、全天候组合、斯文森组合与因子投资——经典投资策略能否应用到房地产投资决策？', date: '2020-07-28', readTime: '约 8 分钟', category: '投资方法论', emoji: '📊' },
+];
 ---
 
 <BaseLayout title="文章" description="算电协同 · 电力交易 · 新能源 · 投资方法论">
+  <a href="/" class="back-link">← 返回首页</a>
+
   <h1>文章</h1>
+  <p style="margin-bottom: 1.5rem;">
+    已发布 <strong>{articles.length}</strong> 篇文章，覆盖 <strong>{categories.length}</strong> 个主题。
+  </p>
 
-  <div class="category-heading">算电协同</div>
-  <ul class="article-list">
-    <li>
-      <a href="/blog/suan-dian-xie-tong-1">算电协同：为什么这是未来五年确定性很高的投资主题</a>
-      <div class="desc">AI 算力集群用电已进入 500MW 级，算力正在成为新的电力需求。2026 年算电协同首次进入政府工作报告，政策窗口已经打开。</div>
-      <div class="meta">2026-05 &middot; 约 8 分钟阅读</div>
-    </li>
-    <li>
-      <a href="/blog/suan-dian-xie-tong-2">算电协同产业链拆解：利润池在哪里？</a>
-      <div class="desc">上游绿电供给、中游智算基建、下游算力服务——三层的利润分布、竞争格局和卡位策略。</div>
-      <div class="meta">2026-05 &middot; 约 10 分钟阅读</div>
-    </li>
-  </ul>
+  <!-- Tag Filter -->
+  <div class="filter-bar" id="filterBar">
+    <button class="filter-btn active" data-filter="all">全部</button>
+    {categories.map((cat) => (
+      <button class="filter-btn" data-filter={cat}>{cat}</button>
+    ))}
+  </div>
 
-  <div class="category-heading">投资方法论</div>
-  <ul class="article-list">
-    <li>
-      <a href="/blog/impossible-triangle">不可能铁三角与战略分层定价：华为思路对投资的启示</a>
-      <div class="desc">质量、成本、低价不可兼得。华为的解法不是三选二，而是市场分层。这对重卡充电站等基础设施投资同样适用。</div>
-      <div class="meta">2026-05 &middot; 约 5 分钟阅读</div>
-    </li>
-  </ul>
-
-  <div class="category-heading">AI 协作</div>
-  <ul class="article-list">
-    <li>
-      <a href="/blog/ppt-quality-lessons">PPT 布局质量迭代：从 57 个问题到零缺陷</a>
-      <div class="desc">用 python-pptx 自动生成投资报告 PPT 的过程中，遇到的布局溢出、重叠问题及其系统化修复方法。</div>
-      <div class="meta">2026-05 &middot; 约 5 分钟阅读</div>
-    </li>
-  </ul>
-
-  <div class="category-heading">项目动态</div>
-  <ul class="article-list">
-    <li>
-      <a href="/projects">算电协同研究报告 & 其他项目</a>
-      <div class="desc">查看已完成的项目作品，包括算电协同深度研究报告、AI 辅助工具等。</div>
-      <div class="meta">持续更新</div>
-    </li>
-  </ul>
+  <!-- Article List -->
+  <div class="article-list" id="articleList">
+    {articles.sort((a, b) => b.date.localeCompare(a.date)).map((a) => (
+      <article class="article-item" data-category={a.category}>
+        <div class="article-emoji">{a.emoji}</div>
+        <div class="article-content">
+          <div class="article-category">{a.category}</div>
+          <a href={`/blog/${a.slug}`} class="article-title">{a.title}</a>
+          <div class="article-desc">{a.desc}</div>
+          <div class="article-meta">{a.date} · {a.readTime}</div>
+        </div>
+      </article>
+    ))}
+  </div>
 </BaseLayout>
-<dcp-message-id>m0053</dcp-message-id>
+
+<style>
+  .filter-bar {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--color-border-light);
+  }
+  .filter-btn {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border-light);
+    color: var(--color-text-muted);
+    padding: 0.35rem 0.85rem;
+    border-radius: 20px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .filter-btn:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+  .filter-btn.active {
+    background: var(--color-accent);
+    color: #fff;
+    border-color: var(--color-accent);
+  }
+
+  .article-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .article-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--color-border-light);
+    transition: opacity 0.2s;
+  }
+  .article-item:last-child {
+    border-bottom: none;
+  }
+
+  .article-emoji {
+    font-size: 1.5rem;
+    line-height: 1.4;
+    flex-shrink: 0;
+    width: 2rem;
+    text-align: center;
+    padding-top: 0.1rem;
+  }
+
+  .article-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .article-category {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    letter-spacing: 0.04em;
+    margin-bottom: 0.2rem;
+  }
+
+  .article-title {
+    display: block;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--color-text);
+    text-decoration: none;
+    line-height: 1.4;
+    margin-bottom: 0.3rem;
+    transition: color 0.15s;
+  }
+  .article-title:hover {
+    color: var(--color-accent);
+  }
+
+  .article-desc {
+    font-size: 0.88rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+    margin-bottom: 0.3rem;
+  }
+
+  .article-meta {
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+  }
+
+  /* Filter animation */
+  .article-item.hidden {
+    display: none;
+  }
+</style>
+
+<script>
+  (function() {
+    var filterBar = document.getElementById('filterBar');
+    var articles = document.querySelectorAll('.article-item');
+
+    filterBar.addEventListener('click', function(e) {
+      var btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+
+      // Update active button
+      filterBar.querySelectorAll('.filter-btn').forEach(function(b) {
+        b.classList.remove('active');
+      });
+      btn.classList.add('active');
+
+      var filter = btn.getAttribute('data-filter');
+
+      articles.forEach(function(article) {
+        if (filter === 'all' || article.getAttribute('data-category') === filter) {
+          article.classList.remove('hidden');
+        } else {
+          article.classList.add('hidden');
+        }
+      });
+    });
+  })();
+</script>

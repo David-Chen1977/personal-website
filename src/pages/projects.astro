@@ -6,51 +6,168 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <a href="/" class="back-link">← 返回首页</a>
 
   <h1>作品</h1>
+  <p style="margin-bottom: 2rem;">已完成的主要项目和产出物。</p>
 
-  <h2>算电协同深度研究报告</h2>
-  <p>
-    一份覆盖中美现状、趋势、商业机会与投资策略的算电协同研究报告。包含 10 张原创信息图，
-    资料来源涵盖 IEA、LBNL、国家数据局、国家发展改革委等权威机构。
-  </p>
-  <div class="tags">
-    <span class="tag">算电协同</span>
-    <span class="tag">投资分析</span>
-    <span class="tag">政策研究</span>
+  <div class="project-grid">
+    <article class="project-card">
+      <div class="project-cover" style="background: linear-gradient(135deg, #1e3a5f 0%, #2d6a9f 100%);">
+        <span class="project-cover-icon">📊</span>
+      </div>
+      <div class="project-body">
+        <h2>算电协同深度研究报告</h2>
+        <div class="tags">
+          <span class="tag">算电协同</span>
+          <span class="tag">投资分析</span>
+          <span class="tag">政策研究</span>
+        </div>
+        <p>覆盖中美现状、趋势、商业机会与投资策略的算电协同研究报告。包含 10 张原创信息图，资料来源涵盖 IEA、LBNL、国家数据局、国家发展改革委等权威机构。</p>
+        <div class="project-meta">
+          <span>PPTX · 16:9 · 10 页</span>
+          <span>2026-05</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="project-card">
+      <div class="project-cover" style="background: linear-gradient(135deg, #0d4f4a 0%, #0d9488 100%);">
+        <span class="project-cover-icon">🎬</span>
+      </div>
+      <div class="project-body">
+        <h2>汇竑资本 · 算电协同战略布局讲解视频</h2>
+        <div class="tags">
+          <span class="tag">算电协同</span>
+          <span class="tag">视频制作</span>
+          <span class="tag">脚本写作</span>
+        </div>
+        <p>2 分钟精炼视频，拆解算电协同的投资逻辑、中国西部成本优势、产业链利润分布及战术时间表。</p>
+        <div class="project-meta">
+          <span>50s · 动画 · 配音</span>
+          <span>2026-05</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="project-card">
+      <div class="project-cover" style="background: linear-gradient(135deg, #4a1a6b 0%, #7c3aed 100%);">
+        <span class="project-cover-icon">🔍</span>
+      </div>
+      <div class="project-body">
+        <h2>PPT 质量审查工具</h2>
+        <div class="tags">
+          <span class="tag">工具开发</span>
+          <span class="tag">python-pptx</span>
+        </div>
+        <p>基于 python-pptx 的 PPT 布局质量检查工具，自动检测文本溢出、元素重叠、对齐偏差等问题。在算电协同报告生成中曾发现并修复 57 个布局问题。</p>
+        <div class="project-meta">
+          <span>Python · CLI</span>
+          <span>2026-05</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="project-card">
+      <div class="project-cover" style="background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);">
+        <span class="project-cover-icon">📝</span>
+      </div>
+      <div class="project-body">
+        <h2>合同条款辅助工具</h2>
+        <div class="tags">
+          <span class="tag">工具开发</span>
+          <span class="tag">法律科技</span>
+        </div>
+        <p>智能合同条款起草辅助工具，支持条款模板管理、历史条款检索、风险条款审查。</p>
+        <div class="project-meta">
+          <span>Web App</span>
+          <span>2026-04</span>
+        </div>
+      </div>
+    </article>
   </div>
-  <p>
-    PPTX 格式 &middot; 16:9 &middot; 10 页 &middot; 2026-05
-  </p>
 
-  <hr />
-
-  <h2>汇竑资本 · 算电协同战略布局讲解视频</h2>
-  <p>
-    2 分钟精炼视频，拆解算电协同的投资逻辑、中国西部成本优势、产业链利润分布及战术时间表。
-  </p>
-  <div class="tags">
-    <span class="tag">算电协同</span>
-    <span class="tag">视频制作</span>
-    <span class="tag">脚本写作</span>
-  </div>
-
-  <hr />
-
-  <h2>AI 辅助工具</h2>
-
-  <h3>PPT 质量审查工具</h3>
-  <p>
-    基于 python-pptx 的 PPT 布局质量检查工具，自动检测文本溢出、元素重叠、对齐偏差等问题。
-    在算电协同报告生成中曾发现并修复 57 个布局问题。
-  </p>
-
-  <h3>合同条款辅助工具</h3>
-  <p>
-    智能合同条款起草辅助工具，支持条款模板管理、历史条款检索、风险条款审查。
-  </p>
-
-  <hr />
-
-  <p style="color: #888; font-size: 0.9rem;">
+  <div class="disclaimer">
     * 具体文件和信息因保密原因未公开发布。如需了解详情，欢迎联系。
-  </p>
+  </div>
 </BaseLayout>
+
+<style>
+  .project-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+  }
+
+  .project-card {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    transition: all 0.25s ease;
+    box-shadow: var(--shadow-card);
+  }
+  .project-card:hover {
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-2px);
+    border-color: var(--color-border);
+  }
+
+  .project-cover {
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .project-cover::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.08) 0%, transparent 60%);
+  }
+  .project-cover-icon {
+    font-size: 2rem;
+    opacity: 0.7;
+    position: relative;
+    z-index: 1;
+  }
+
+  .project-body {
+    padding: 1.25rem;
+  }
+  .project-body h2 {
+    font-size: 1.1rem;
+    font-weight: 650;
+    margin: 0 0 0.5rem;
+    color: var(--color-text);
+  }
+  .project-body p {
+    font-size: 0.88rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-bottom: 0.75rem;
+  }
+  .project-body .tags {
+    margin-bottom: 0.75rem;
+  }
+  .project-meta {
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+    display: flex;
+    gap: 1rem;
+  }
+
+  .disclaimer {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--color-border-light);
+    margin-top: 1rem;
+  }
+
+  @media (max-width: 640px) {
+    .project-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

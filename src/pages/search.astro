@@ -1,0 +1,74 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="搜索" description="站内搜索 — 文章全文搜索">
+  <link href="/pagefind/pagefind-ui.css" rel="stylesheet">
+  <script src="/pagefind/pagefind-ui.js" is:inline></script>
+
+  <a href="/" class="back-link">← 返回首页</a>
+
+  <h1>搜索</h1>
+  <p style="margin-bottom: 2rem; color: var(--color-text-muted);">搜索全部文章内容，按相关性排序。</p>
+
+  <div id="search"></div>
+
+  <script is:inline>
+    window.addEventListener('DOMContentLoaded', function() {
+      if (typeof PagefindUI !== 'undefined') {
+        new PagefindUI({
+          element: '#search',
+          showSubResults: true,
+          showImages: false,
+          resetStyles: false,
+          translations: {
+            placeholder: '搜索文章...',
+            zero_results: '没有找到相关文章',
+            result: '个结果',
+            results: '个结果',
+            clear_search: '清除搜索',
+            search: '搜索',
+            load_more: '加载更多',
+            more_available: '个更多结果'
+          }
+        });
+      }
+    });
+  </script>
+
+  <style>
+    :root {
+      --pagefind-ui-scale: 1;
+      --pagefind-ui-primary: var(--color-accent);
+      --pagefind-ui-text: var(--color-text);
+      --pagefind-ui-background: var(--color-bg-card);
+      --pagefind-ui-border: var(--color-border);
+      --pagefind-ui-tag: var(--color-accent-bg);
+      --pagefind-ui-border-width: 1px;
+      --pagefind-ui-border-radius: 8px;
+      --pagefind-ui-image-border-radius: 8px;
+      --pagefind-ui-image-box-ratio: 3 / 2;
+      --pagefind-ui-font: inherit;
+    }
+
+    #search {
+      max-width: 100%;
+    }
+
+    /* Override Pagefind default styles to match our theme */
+    .pagefind-ui__search-clear {
+      color: var(--color-text-muted) !important;
+    }
+    .pagefind-ui__search-input {
+      padding: 0.75rem 1rem !important;
+      font-size: 1rem !important;
+    }
+    .pagefind-ui__result-title {
+      font-weight: 600 !important;
+    }
+    .pagefind-ui__result-excerpt mark {
+      background: var(--color-accent-bg) !important;
+      color: var(--color-accent) !important;
+    }
+  </style>
+</BaseLayout>
