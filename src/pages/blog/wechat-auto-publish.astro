@@ -1,0 +1,142 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import RelatedArticles from '../../components/RelatedArticles.astro';
+---
+
+<BaseLayout title="微信公众号配图自动化：从 Playwright 挣扎到 API 闭环" description="用 Pollinations.ai 免费生图 + WeChat API 实现公众号图文自动配图的全流程记录，含踩坑实录。">
+  <a href="/blog" class="back-link">← 返回文章列表</a>
+
+  <h1>微信公众号配图自动化：从 Playwright 挣扎到 API 闭环</h1>
+  <div class="article-meta">
+    <span>2026-05-29</span>
+    <span>· 约 5 分钟阅读</span>
+  </div>
+  <div class="tags">
+    <span class="tag">AI 协作</span>
+    <span class="tag">效率工具</span>
+  </div>
+
+  <blockquote>
+    之前已经跑通了自动撰写发布公众号文章的流程，但缺高质量配图。ChatGPT Plus 的 DALL·E 要付费，Midjourney 也要付费——免费方案能满足需求吗？
+  </blockquote>
+
+  <p>答案是：能。而且不止能——整套流程跑通后，从写文到配图到生成草稿，只需要一行命令。</p>
+
+  <h2>为什么选 Pollinations.ai</h2>
+
+  <p>调研了几个免费 AI 生图方案：</p>
+
+  <table>
+    <tr>
+      <th>方案</th>
+      <th>费用</th>
+      <th>质量</th>
+      <th>API 易用性</th>
+    </tr>
+    <tr>
+      <td>Pollinations.ai</td>
+      <td>免费</td>
+      <td>★★★★（Flux 模型）</td>
+      <td>★★★★★（GET 请求即可）</td>
+    </tr>
+    <tr>
+      <td>Hugging Face 免费推理</td>
+      <td>免费</td>
+      <td>★★★（模型参差不齐）</td>
+      <td>★★（需 API Key + 排队）</td>
+    </tr>
+    <tr>
+      <td>Stable Diffusion 自部署</td>
+      <td>电费</td>
+      <td>★★★★</td>
+      <td>★（需 GPU 硬件）</td>
+    </tr>
+    <tr>
+      <td>调用公共 AI 服务</td>
+      <td>按量付费</td>
+      <td>★★★★★</td>
+      <td>★★★</td>
+    </tr>
+  </table>
+
+  <p>Pollinations.ai 的杀手锏：<strong>不需要 API Key</strong>，不需要注册，直接 <code>GET https://image.pollinations.ai/prompt/&#123;描述&#125;</code> 就能拿到图。底层跑的是 Flux 模型，质量够用。</p>
+
+  <h2>弯路：Playwright 浏览器自动化</h2>
+
+  <p>最开始的想法很直接——用 Playwright 模拟人工操作公众号后台：扫码登录 → 进编辑器 → 粘贴内容 → 上传图片 → 发布。</p>
+
+  <p>实际遇到的问题：微信公众号后台（mp.weixin.qq.com）是一个重度 Vue SPA。Playwright 的 Chromium 启动后，页面一直白屏或半渲染状态，编辑器区域的 DOM 节点根本无法交互。</p>
+
+  <p>试过的各种方案：</p>
+  <ul>
+    <li>复用本地 Chrome Profile 保持登录态</li>
+    <li>CDP（Chrome DevTools Protocol）连接已有浏览器</li>
+    <li>复制 Cookie 注入新浏览器实例</li>
+  </ul>
+
+  <p>都不行。公众号后台对非真实浏览器环境做了检测，SPA 渲染层就是打不开。这个方向走了两轮尝试后放弃。</p>
+
+  <h2>正解：微信官方 API</h2>
+
+  <p>换思路。公众号平台开放了 REST API（<code>api.weixin.qq.com</code>），只要申请到 AppID 和 AppSecret，就能操作大部分后台功能。</p>
+
+  <p>整条链路如下：</p>
+
+  <pre><code>文章内容 + 图片主题
+    ↓
+Pollinations.ai 免费生图（3 张配图）
+    ↓ 下载到本地
+上传到微信 CDN（cgi-bin/media/uploadimg）
+    ↓ 拿到微信 CDN URL
+上传封面到素材库（cgi-bin/material/add_material）
+    ↓ 拿到 media_id
+组装 HTML 正文（含微信 CDN 图片链接）
+    ↓
+创建草稿（cgi-bin/draft/add）
+    ↓ 手动发布
+公众号发布</code></pre>
+
+  <h3>关键点</h3>
+
+  <p><strong>正文中的图片和封面的图片是两套不同的上传 API</strong>，这是一个容易踩的坑：</p>
+  <ul>
+    <li><code>cgi-bin/media/uploadimg</code> — 上传后返回微信 CDN URL，用于正文 <code>&lt;img&gt;</code> 标签</li>
+    <li><code>cgi-bin/material/add_material</code> — 上传后返回 <code>media_id</code>，用于封面引用</li>
+  </ul>
+
+  <p>一开始我两张用了同一个 API 上传，结果正文里的图片全部显示不出来——微信编辑器不会加载外链图片。</p>
+
+  <h3>限制：未认证订阅号无法 API 发布</h3>
+
+  <p>费了很大劲发现：<strong>未认证的订阅号</strong>（大多数个人号）调用 <code>cgi-bin/freepublish/submit</code> 时会返回错误码 <code>48001 api unauthorized</code>。尝试旧版群发接口也一样。</p>
+
+  <p>也就是说自动化只能到「创建草稿」这一步。发布需要人工去后台草稿箱点一下按钮。</p>
+
+  <p>这对个人号来说完全可以接受——草稿箱里文章已经图文并茂，检查一遍再发布反而更放心。</p>
+
+  <h2>最终产出</h2>
+
+  <p>一个 Node.js 脚本（<code>publish-via-api.mjs</code>），一条命令即可完成：</p>
+
+  <pre><code>node publish-via-api.mjs --topic "你的文章主题"</code></pre>
+
+  <p>运行结果：</p>
+  <ul>
+    <li>自动生成 3 张配图（Pollinations.ai）</li>
+    <li>上传到微信 CDN 并嵌入正文</li>
+    <li>设置封面</li>
+    <li>创建草稿</li>
+  </ul>
+
+  <p>然后去公众号后台「草稿箱」→ 找到文章 → 点击发布。</p>
+
+  <p>从「找图半小时」到「配图十秒钟」，这个闭环彻底解决了公众号配图的痛点。</p>
+
+  <hr />
+
+  <p style="font-size: 0.9rem; color: var(--text-muted);">
+    文中提到的脚本在 <code>~/Documents/wechat-publisher/</code> 目录下，Pollinations.ai 免费生图无需 API Key。
+  </p>
+
+<RelatedArticles currentSlug="wechat-auto-publish" category="AI 协作" />
+</BaseLayout>

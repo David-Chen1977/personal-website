@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-const categories = ['政策解读', '算电协同', '电力交易', '新能源', '虚拟电厂', 'AI+电力', '售电公司', '投资方法论', 'AI 协作'];
+const categories = ['政策解读', '算电协同', '电力交易', '新能源', '虚拟电厂', 'AI+电力', '售电公司', '投资方法论', '个人投资', 'AI 协作'];
 
 interface Article {
   slug: string;
@@ -13,6 +13,7 @@ interface Article {
 }
 
 const articles: Article[] = [
+  { slug: 'wechat-auto-publish', title: '微信公众号配图自动化：从 Playwright 挣扎到 API 闭环', desc: '用 Pollinations.ai 免费生图 + WeChat API 实现公众号图文自动配图，含 Playwright 自动化失败的踩坑实录。', date: '2026-05-29', readTime: '5 分钟', category: 'AI 协作' },
   { slug: 'suan-dian-xie-tong-deep-analysis', title: '算电协同深度分析：当算力遇上电力的结构性机会', desc: '底层逻辑从"电随算动"到"算随电动"，五大落地模式与四条投资主线的全面拆解。', date: '2026-05-29', readTime: '12 分钟', category: '算电协同' },
   { slug: 'suan-dian-xie-tong-AI', title: '算电协同：AI 下半场，电比芯片更稀缺', desc: '算力遇到电力瓶颈，中美两套体制给出了完全不同的应对逻辑。三层投资优先级和六个商业模式拆解。', date: '2026-05-28', readTime: '10 分钟', category: '算电协同' },
   { slug: 'liu-zhang-wang-deep', title: '六张网规划实施方案深度解读：7万亿投资的底层逻辑', desc: '从政治局定调到发改委落地，六张网的投资逻辑、产业链拆解、多网协同效应与时间窗口。', date: '2026-05-25', readTime: '15 分钟', category: '政策解读' },
@@ -28,6 +29,7 @@ const articles: Article[] = [
   { slug: 'AI-miao-sha-xian-huo', title: 'AI秒杀现货交易！电力市场惊现12%收益暴增', desc: 'AI正化身电力现货交易的核心引擎，从预测到风控再到交易决策全面重构。', date: '2025-06-21', readTime: '5 分钟', category: 'AI+电力' },
   { slug: 'guang-chu-chong-yi-ti-hua', title: '光储充一体化：新能源时代电力系统的"破局之钥"', desc: '光伏、储能、充电三大模块通过集成释放系统级价值。', date: '2025-06-14', readTime: '5 分钟', category: '新能源' },
   { slug: 'shou-dian-gong-si-sheng-cun-zhi-nan', title: '2025年售电公司生存指南：三类公司如何强行续命？', desc: '电改57号文后售电行业大洗牌，三类公司存活路线。', date: '2025-06-10', readTime: '4 分钟', category: '售电公司' },
+  { slug: 'AI-neng-yuan-gao-jia-zhi-chang-jing', title: '51个高价值场景揭榜挂帅：AI+能源的iPhone时刻到了', desc: '国家能源局首次用"场景开放+揭榜挂帅"发布51个AI+能源商机入口，7月30日首轮截止。三类人的行动指南。', date: '2026-05-29', readTime: '8 分钟', category: 'AI+能源' },
   { slug: 'huo-dian-ling-huo-xing-gai-zao', title: '电力现货市场新规落地，火电灵活性改造迎风口', desc: '现货电价波动加大是确定性趋势，火电调峰价值正在重估。', date: '2026-02-28', readTime: '3 分钟', category: '电力交易' },
   { slug: 'zu-he-tou-zi-yin-zi-tou-zi', title: '组合投资和因子投资对房地产投资策略的启示', desc: '经典投资策略能否应用到房地产投资决策？', date: '2020-07-28', readTime: '8 分钟', category: '投资方法论' },
 ];
@@ -168,6 +170,20 @@ const sorted = articles.sort((a, b) => b.date.localeCompare(a.date));
   (function() {
     var bar = document.getElementById('filterBar');
     var articles = document.querySelectorAll('.article-row');
+
+    // Support ?category=XXX from URL
+    var params = new URLSearchParams(window.location.search);
+    var initialCategory = params.get('category');
+    if (initialCategory) {
+      var targetBtn = bar.querySelector('[data-filter="' + initialCategory + '"]');
+      if (targetBtn) {
+        bar.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+        targetBtn.classList.add('active');
+        articles.forEach(function(a) {
+          a.classList.toggle('hidden', a.getAttribute('data-category') !== initialCategory);
+        });
+      }
+    }
 
     bar.addEventListener('click', function(e) {
       var btn = e.target.closest('.filter-btn');
