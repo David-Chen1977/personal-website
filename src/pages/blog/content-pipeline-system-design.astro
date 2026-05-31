@@ -1,0 +1,228 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import RelatedArticles from '../../components/RelatedArticles.astro';
+---
+
+<BaseLayout title="内容管线2.0：从一次实验到自动化生产系统" description="几个月时间，我把一次性的内容生产实验，演化为一个由选题感知、外部信号扫描、QC门禁支撑的自动化管线系统。现状分析与优化路线图。">
+  <a href="/blog" class="back-link">← 返回文章列表</a>
+
+  <h1>内容管线2.0：<br />从一次实验到自动化生产系统</h1>
+  <div class="article-meta">
+    <span>2026-05-31</span>
+    <span>· 约 15 分钟阅读</span>
+  </div>
+  <div class="tags">
+    <span class="tag">AI 协作</span>
+    <span class="tag">工作流</span>
+    <span class="tag">自动化</span>
+    <span class="tag">系统设计</span>
+  </div>
+
+  <blockquote>
+    <p>一个月前，我做了一个实验：用一个输入主题，同时产出 PPT、公众号、网站文章、视频四篇内容。实验结果不错，但离"可持续"还有距离。之后几周，我把那个实验变成了一条真正的生产线——有编排器、有选题感知、有质量门禁、有外部信号触发。这篇是系统设计总结和优化路线图。</p>
+  </blockquote>
+
+  <h2>一、起源：为什么要从实验走向系统</h2>
+
+  <p>上一篇 <a href="/blog/ai-content-pipeline-experiment">《一个主题，4个产出》</a> 记录了我们用 AI 从单一主题同时产出四种内容形态的实验。那次实验的核心发现：</p>
+
+  <ul>
+    <li><strong>一次性实验做得再好，也不能自动化复用。</strong> 脚本之间靠手动拷贝文件，配图提示词写死在代码里，发布用不同的入口甚至不同的机器。</li>
+    <li><strong>选题靠拍脑袋。</strong> 每次都是"想到了什么就写什么"，没有体系化的选题管理，也没有外部信号驱动。</li>
+    <li><strong>质量没有反馈。</strong> 发出去的公众号文章如有排版问题、配图挂了，只能等读者反馈才知道。</li>
+  </ul>
+
+  <p>结论很清晰：内容生产的前半段（创意→文稿）需要人，后半段（格式化→配图→分发→质量监控）可以交给系统。这个系统不能是一个巨大的单文件脚本，而应该是一组可组合、可独立演进的模块。</p>
+
+  <h2>二、系统总览</h2>
+
+  <p>当前管线系统部署在 ~/Documents/ 目录下，由以下组件构成：</p>
+
+  <h3>2.1 编排层</h3>
+
+  <table>
+    <tr><th>组件</th><th>职责</th><th>代码行数</th><th>成熟度</th></tr>
+    <tr><td>content-pipe.mjs</td><td>统一编排器：接收主题→研究→内容包→分发→QC→报告</td><td>~650</td><td>🟡 核心流程完整，但研究环节是占位符</td></tr>
+    <tr><td>topic-sense.mjs</td><td>选题感知：扫描知识库缺口 + 产出历史 → 建议</td><td>~330</td><td>🟢 独立可用，已对接双管道</td></tr>
+    <tr><td>domain-watch.mjs</td><td>外部信号扫描器：Google News RSS + DuckDuckGo 搜索</td><td>~480</td><td>🟡 新增组件，信号源需扩展</td></tr>
+  </table>
+
+  <h3>2.2 产出层</h3>
+
+  <table>
+    <tr><th>组件</th><th>产出</th><th>技术栈</th><th>成熟度</th></tr>
+    <tr><td>publish.mjs</td><td>公众号文章</td><td>Node.js + WeChat API + Pollinations.ai 配图</td><td>🟢 完整，支持 --config/--preview</td></tr>
+    <tr><td>article-quality-gate.mjs</td><td>公众号QC门禁</td><td>检查配图可达性、标题/摘要/正文完整性</td><td>🟢 自动触发</td></tr>
+    <tr><td>publish-playwright.mjs</td><td>公众号（备选方案）</td><td>Playwright 扫码登录</td><td>🟡 作为 API 方案的 backup</td></tr>
+    <tr><td>ppt-creation skill</td><td>PPT 路演材料</td><td>python-pptx / BananaSlides / HUIIHONG 模版</td><td>🟢 15+ 产出</td></tr>
+    <tr><td>HyperFrames 管线</td><td>视频号</td><td>HTML + GSAP + edge-tts</td><td>🔴 效果不满意，暂停固化</td></tr>
+    <tr><td>website 管线</td><td>个人网站（本文的部署管道）</td><td>Astro + Cloudflare Pages</td><td>🟡 Git push 手动部署</td></tr>
+  </table>
+
+  <h3>2.3 自动化层</h3>
+
+  <table>
+    <tr><th>组件</th><th>功能</th><th>触发方式</th></tr>
+    <tr><td>topic-sense-daily.sh</td><td>每天 8:00 自动跑选题感知 + 外部信号扫描 → 写入 Daily Note</td><td>launchd</td></tr>
+    <tr><td>knowledge-index.mjs</td><td>产出后自动写入知识库 + Wiki 概念编译</td><td>content-pipe 自动调度</td></tr>
+    <tr><td>qc-gate skill</td><td>交付前三级门禁（正确性→规范性→Taste）</td><td>在发布 PPT/文章前触发</td></tr>
+  </table>
+
+  <h2>三、关键架构决策回顾</h2>
+
+  <h3>3.1 content-pipe.mjs：一切从这里过</h3>
+
+  <p>content-pipe 是管线的大脑。它接收一个主题，按顺序执行：研究 → 内容包生成 → 并行产出 → QC → 知识库索引 → 报告。架构上的关键决策：</p>
+
+  <ul>
+    <li><strong>生产批次目录</strong>：每个主题一个独立目录 <code>生产批次/&#123;date&#125;_&#123;slug&#125;/</code>，各环节的中间产物都在这里，方便回溯。</li>
+    <li><strong>干运行</strong>：--dry-run 模式只打印计划不执行，适合预览。</li>
+    <li><strong>预览模式</strong>：每个产出类型都有 --preview，发布前检查。</li>
+    <li><strong>--suggest 双管道</strong>：先 domain-watch 扫外部信号，再 topic-sense 分析知识库缺口，双源交叉推荐。</li>
+  </ul>
+
+  <h3>3.2 公众号管线的三次迭代</h3>
+
+  <p>公众号发布脚本经历了三次完整重写：</p>
+
+  <ol>
+    <li><strong>v0 (publish_didi_*.mjs)</strong>：硬编码版本，每个文章一个独立脚本，配图提示词写死在代码里。不可复用。</li>
+    <li><strong>v1 (publish-via-api.mjs + publish-article.mjs)</strong>：通用化，支持参数传入，但两个脚本功能重叠。</li>
+    <li><strong>v2 (publish.mjs + publish-playwright.mjs)</strong>：整合为单入口 publish.mjs（API 方案），publish-playwright.mjs 作为 Playwright 后备方案。新增 <code>--config</code> 参数支持 JSON 配置驱动，<code>--preview</code> 自动触发 QC 门禁。</li>
+  </ol>
+
+  <p>三次迭代的教训：管线基础设施不要做文章定制。第一次我把图片 URL 硬编码了，第二次把配图提示词写死了。直到通用化为 JSON 配置文件驱动，才真正做到了"一次配置，多篇复用"。</p>
+
+  <h3>3.3 选题感知的四个数据源</h3>
+
+  <p>topic-sense 的选题策略最终演化为四个数据源交叉验证：</p>
+
+  <ol>
+    <li><strong>知识库缺口</strong>：扫描 30-Notes / 40-Reading 目录，按 8 个领域标签统计覆盖度 🔴🟡🟢。</li>
+    <li><strong>外部信号</strong>：domain-watch 每天扫 Google News RSS + DuckDuckGo，按领域分类并评分相关度。</li>
+    <li><strong>产出历史</strong>：已产出内容自动延伸到系列文章。</li>
+    <li><strong>时间节点</strong>：季节性选题（夏季用电高峰、年中年末政策窗口）。</li>
+  </ol>
+
+  <p>交叉推荐逻辑：当一个领域的外部信号密集（>3 条高相关度），同时知识库覆盖度低（🔴 缺口），这个选题自动提升为最高优先级。</p>
+
+  <h3>3.4 质量门禁：从无到有</h3>
+
+  <p>发布前最怕什么？配图挂了、标题太短、摘要超限。article-quality-gate.mjs 在 --preview 保存预览 HTML 后自动运行：</p>
+
+  <ul>
+    <li><strong>图片可达性</strong>：每张配图发 HEAD 请求检查 HTTP 状态码</li>
+    <li><strong>标题完整性</strong>：标题不空、不超 64 字（微信限制）</li>
+    <li><strong>摘要合法性</strong>：不超过 120 字</li>
+    <li><strong>正文完整性</strong>：有足够段落，不是只有标题</li>
+  </ul>
+
+  <p>G1 正确性检查在 30 秒内完成，G2 规范性和 G3 Taste 品味检查则交给人工判断。</p>
+
+  <h2>四、还需要优化的地方</h2>
+
+  <p>以下按 P0-P3 优先级排列：</p>
+
+  <h3>🔴 P0 — 最痛</h3>
+
+  <ol>
+    <li>
+      <p><strong>研究阶段是占位符。</strong> runResearch() 函数目前只写了一个骨架模板，没有真正的 LLM 研究能力。它应该在收到主题后，自动执行 web search + 知识库检索 + 研报消化，输出结构化的 research.md。</p>
+      <p><em>目标</em>：研究阶段自动产出 2000 字 + 关键数据 + 来源列表。</p>
+    </li>
+    <li>
+      <p><strong>生成 ≠ 发布。</strong> publish.mjs 只创建微信草稿，不自动发布。原因是未认证订阅号没有 API 发布权限。这意味着即使管线全自动化，最后一步还是得手点。</p>
+      <p><em>思考</em>：这或许不是技术问题，而是平台限制。可以接受"草稿到达"作为管线终点。</p>
+    </li>
+  </ol>
+
+  <h3>🟡 P1 — 应优化</h3>
+
+  <ol start="3">
+    <li>
+      <p><strong>视频管线质量不足。</strong> SST 固态变压器视频是 HyperFrames 的第一个完整项目。虽然 QC 全通过（lint/validate/inspect 均零错误），但用户反馈"字体表现力不足、视觉效果偏静态、无字幕"。核心瓶颈是中文字体在 HyperFrames 中的渲染和深度科普视频的视觉叙事设计。</p>
+      <p><em>方向</em>：先建立一个视频模板库，再优化单篇质量。</p>
+    </li>
+    <li>
+      <p><strong>外部信号源单一。</strong> domain-watch 目前只用了两个免费引擎（Google News RSS + DuckDuckGo）。对于中文行业动态，这两者的覆盖度一般。期望的信号源：RSSHub（公众号文章转 RSS）、雪球/东方财富（资本市场信号）、国家能源局/发改委官网更新。</p>
+      <p><em>方向</em>：逐个添加 RSS 订阅源，先到 5 个关键源。</p>
+    </li>
+    <li>
+      <p><strong>配图是单点故障。</strong> Pollinations.ai 免费但不稳定——偶尔超时、偶尔返回空图、没有 fallback 机制。理论上微信 CDN 上传成功后图片就安全了，但上传前的下载环节是脆弱的。</p>
+      <p><em>方向</em>：本地缓存 + 多源 fallback（Unsplash / Pexels API 作为备选）。</p>
+    </li>
+  </ol>
+
+  <h3>🟢 P2 — 值得做</h3>
+
+  <ol start="6">
+    <li><strong>没有失败告警。</strong> launchd 定时任务失败没有人知道。脚本内部 try/catch 吞掉了很多错误。需要一个集中式的运行日志 + 关键失败通知渠道。</li>
+    <li><strong>网站管线未接入编排器。</strong> 目前这篇文章是手动写的 .astro 文件 + git push。content-pipe.mjs 虽有 --types website 但只生成 website.md 骨架，没有自动构建和部署。</li>
+    <li><strong>内容版本管理。</strong> 公众号草稿创建后，如果修改需要重新跑整个管线。不支持"增量更新"——改一段文字就得重新生成全文。</li>
+    <li><strong>测试缺失。</strong> 650 行的 content-pipe.mjs 和 480 行的 domain-watch.mjs 没有任何单元测试。每次修改靠手动运行验证。</li>
+  </ol>
+
+  <h3>🔵 P3 — 锦上添花</h3>
+
+  <ol start="10">
+    <li><strong>多语言输出。</strong> 当前管线只产出中文内容。对于关注领域（电力市场、储能、AI+能源），部分优质来源是英文的。自动翻译 + 双语分发会增加覆盖面。</li>
+    <li><strong>信号热度衰减。</strong> domain-signals.json 里的信号没有过期机制。一周前的政策信号如果没有被消费，应该自动降低优先级。</li>
+    <li><strong>内容日历可视化。</strong> 在个人网站上增加一个"已规划→生产中→已发布"的内容日历页面，既是编排工具也是透明度展示。</li>
+  </ol>
+
+  <h2>五、一些数据</h2>
+
+  <table>
+    <tr><th>指标</th><th>数值</th></tr>
+    <tr><td>总脚本数</td><td>12 个</td></tr>
+    <tr><td>总代码行数</td><td>~3,500 行</td></tr>
+    <tr><td>关注领域</td><td>8 个（电力/双碳/充电/算电协同/储能/AI+能源/政策/投资）</td></tr>
+    <tr><td>已发布文章（本网站）</td><td>23 篇</td></tr>
+    <tr><td>已发布公众号</td><td>5+ 篇</td></tr>
+    <tr><td>产出过 PPT</td><td>15+ 份（含汇竑红金模版）</td></tr>
+    <tr><td>视频尝试</td><td>3+ 条（含 SST 固态变压器深度科普）</td></tr>
+    <tr><td>自动化定时任务</td><td>1 个（launchd 每天 8:00）</td></tr>
+    <tr><td>新增组件</td><td>4 个（domain-watch/article-quality-gate/topic-sense-daily/didi config）</td></tr>
+  </table>
+
+  <h2>六、小结：系统架构的一个原则</h2>
+
+  <p>回顾整个过程，如果只用一个原则来总结，那就是：<strong>编排器不能替执行器做决定。</strong></p>
+
+  <p>content-pipe 知道要产出什么，但它不决定选题。topic-sense 知道哪些领域缺内容，但它不能写研究稿。domain-watch 知道外面发生了什么，但它不判断值不值得写。每一层都只做自己擅长的事，通过结构化的数据契约（JSON、Markdown、exit code）和下一层通信。</p>
+
+  <p>这个原则在软件工程里叫"关注分离"（Separation of Concerns），在内容生产里叫"让 AI 做 AI 擅长的，让人做人擅长的"。</p>
+
+  <p>下一阶段的目标：把研究阶段从占位符变成真正能工作的模块，同时把视频管线的质量拉到和其他三条管线相同的水平。但那是下一篇文章的事了。</p>
+
+  <p style="margin-top:2rem; padding:1rem; background:#f5f7fa; border-radius:6px; font-size:0.9rem; color:#666;">
+    相关文章：<br/>
+    <a href="/blog/ai-content-pipeline-experiment">→ 《一个主题，4个产出：我用AI搭了一条从研究到交付的内容管线》</a><br/>
+    <a href="/blog/wechat-auto-publish">→ 《微信公众号配图自动化》</a><br/>
+    <a href="/blog/huihong-ppt-dev-journey">→ 《HUIIHONG PPT 模版开发》</a>
+  </p>
+
+  <RelatedArticles currentSlug="content-pipeline-system-design" category="AI 协作" />
+</BaseLayout>
+
+<style>
+  .back-link { display:inline-block; color:var(--text-muted); font-size:0.85rem; margin-bottom:1rem; }
+  .back-link:hover { color:var(--accent); text-decoration:none; }
+  h1 { font-size:1.8rem; line-height:1.25; margin-bottom:0.3rem; }
+  .article-meta { color:var(--text-muted); font-size:0.82rem; margin-bottom:0.8rem; }
+  .article-meta span { margin-right:0.6rem; }
+  .tags { margin-bottom:2rem; }
+  .tag { display:inline-block; background:var(--bg-elevated); color:var(--text-secondary); font-size:0.75rem; padding:0.15rem 0.55rem; border-radius:3px; margin-right:0.3rem; }
+  blockquote { background:var(--bg-elevated); border-left:3px solid var(--accent); margin:1.5rem 0; padding:0.8rem 1rem; font-size:0.95rem; color:var(--text-secondary); line-height:1.6; }
+  blockquote p { margin:0; }
+  h2 { font-size:1.25rem; margin-top:2.5rem; margin-bottom:0.8rem; padding-bottom:0.3rem; border-bottom:1px solid var(--border-light); }
+  h3 { font-size:1.05rem; margin-top:1.8rem; margin-bottom:0.4rem; }
+  p { line-height:1.7; margin-bottom:0.8rem; }
+  ul, ol { padding-left:1.2rem; }
+  li { margin-bottom:0.4rem; line-height:1.6; }
+  strong { color:var(--text); }
+  table { width:100%; border-collapse:collapse; margin:1.2rem 0; font-size:0.88rem; }
+  th { background:var(--bg-elevated); padding:0.5rem 0.7rem; border:1px solid var(--border-light); font-weight:600; text-align:left; }
+  td { padding:0.5rem 0.7rem; border:1px solid var(--border-light); }
+  code { background:var(--bg-elevated); padding:0.1rem 0.35rem; border-radius:3px; font-size:0.85em; }
+</style>

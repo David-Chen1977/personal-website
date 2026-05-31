@@ -1,0 +1,196 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import RelatedArticles from '../../components/RelatedArticles.astro';
+---
+
+<BaseLayout title="一个主题，4个产出：我用AI搭了一条从研究到交付的内容管线" description="同一份研究，同时产出PPT、网站文章、公众号文章、视频。技术栈对比和实战避坑记录。">
+  <a href="/blog" class="back-link">← 返回文章列表</a>
+
+  <h1>一个主题，4个产出：<br />我用AI搭了一条从研究到交付的内容管线</h1>
+  <div class="article-meta">
+    <span>2026-05-30</span>
+    <span>· 约 12 分钟阅读</span>
+  </div>
+  <div class="tags">
+    <span class="tag">AI 协作</span>
+    <span class="tag">工作流</span>
+    <span class="tag">视频制作</span>
+    <span class="tag">自动化</span>
+  </div>
+
+  <blockquote>
+    <p>先交代背景：我以"滴滴杀入电力市场"为题，用AI依次产出了汇竑PPT、个人网站深度文章、公众号文章、短视频——四种完全不同的内容形态。这篇文章不是教你怎么做，而是记录过程中踩的坑、做的取舍、以及每条管线的真实生产力评估。</p>
+  </blockquote>
+
+  <h2>一、为什么做这个实验</h2>
+  <p>一个很直接的需求驱动了这件事：同样的研究内容，能不能一次搞定，分发到所有我需要的地方？</p>
+  <p>投资路演PPT（给投资人看）、网站文章（长尾流量）、公众号（微信生态触达）、短视频（视频号算法推荐）——这四个渠道的受众、信息密度、消费场景完全不同。如果每个都单独做一遍，成本高到不可能持续。</p>
+  <p>目标很明确：<strong>一次研究，多渠道产出。</strong></p>
+
+  <h2>二、四管齐下的技术选型</h2>
+  <p>最终使用的技术栈组合：</p>
+  <table>
+    <tr>
+      <th>产出</th>
+      <th>工具</th>
+      <th>质量</th>
+      <th>耗时</th>
+    </tr>
+    <tr>
+      <td>汇竑PPT</td>
+      <td>python-pptx + HUIIHONG模版</td>
+      <td>⭐⭐⭐⭐ 专业级</td>
+      <td>~6min（含研究）</td>
+    </tr>
+    <tr>
+      <td>网站文章</td>
+      <td>Astro + Markdown</td>
+      <td>⭐⭐⭐⭐ 深度内容</td>
+      <td>~3min</td>
+    </tr>
+    <tr>
+      <td>公众号文章</td>
+      <td>自定义 md→WeChat HTML 转换器</td>
+      <td>⭐⭐⭐⭐ 排版可控</td>
+      <td>~5min（含配图）</td>
+    </tr>
+    <tr>
+      <td>短视频</td>
+      <td>HyperFrames（HTML→MP4）</td>
+      <td>⭐⭐⭐⭐⭐ 定制级</td>
+      <td>~15min（制作+渲染）</td>
+    </tr>
+  </table>
+  <p>注意这个耗时是从"开始研究"到"交付成品"的全链路。研究写核心稿花了约1分钟，其余是生成和修复的时间。</p>
+
+  <h2>三、每条管线的关键决策</h2>
+
+  <h3>3.1 研究层：一次写好，到处引用</h3>
+  <p>核心研究稿约3000字，覆盖事件背景、数据、政策分析、竞争格局、投资机会。这个文件是所有产出的source of truth。后续PPT、文章、视频的脚本都从这个文件取内容，保证了信息一致性。</p>
+  <p><strong>教训：</strong>研究阶段值得花时间把框架搭好。草率的研究会在后续每个产出中放大错误。</p>
+
+  <h3>3.2 PPT：用模版解决80%的排版问题</h3>
+  <p>HUIIHONG模版（gen_huihong_v2.py）是之前迭代了10轮的成果。这次只需要把内容填进去：封面、分节页、卡片页、指标页——每种布局都有对应的函数。<strong>模版是效率杠杆，值得提前投资。</strong></p>
+
+  <h3>3.3 公众号：从踩坑到可复用管线</h3>
+  <p>公众号是这次踩坑最多的环节。经历了三次迭代才稳定：</p>
+  <ul>
+    <li><strong>v1：</strong>用Playwright自动化——扫码登录+浏览器操作。不稳定，微信前端经常改。</li>
+    <li><strong>v2：</strong>用WeChat官方API——直连调通，但排版踩坑：表格分隔行没过滤、`---` 变成粗横线、微信吃掉`<ol>`编号。</li>
+    <li><strong>v3：</strong>所有问题修完——手动编号防消除、按章节切块插图、预览模式验证。</li>
+  </ul>
+  <p>最终固定为 <code>publish.mjs</code> 脚本，接受任意 markdown 文件，自动生图、上传微信CDN、创建草稿。</p>
+
+  <h3>3.4 视频：从MPT到HyperFrames的跃迁</h3>
+  <p>最开始尝试 MoneyPrinterTurbo——自动搜素材+拼接+配音。缺点很明显：中文素材匹配差、字幕粗糙、信息密度低。</p>
+  <p>中间试过渡方案：PPT逐页渲染为图片+配音合成。信息密度够但画面呆板。</p>
+  <p>最终选择了 <strong>HyperFrames</strong>：用 HTML 写视频。CSS 控制画面、GSAP 控制动画、edge_tts 配音、逐帧渲染 MP4。质量天花板高，但开发成本也高——5场景用了约250行HTML+30行GSAP。</p>
+
+  <h2>四、对比：四条管线的实用评估</h2>
+
+  <table>
+    <tr>
+      <th>维度</th>
+      <th>PPT</th>
+      <th>网站</th>
+      <th>公众号</th>
+      <th>视频</th>
+    </tr>
+    <tr>
+      <td>信息密度</td>
+      <td>高</td>
+      <td>高</td>
+      <td>中</td>
+      <td>低（受时长限制）</td>
+    </tr>
+    <tr>
+      <td>制作成本</td>
+      <td>低（有模版）</td>
+      <td>低</td>
+      <td>低（管线固化后）</td>
+      <td>高</td>
+    </tr>
+    <tr>
+      <td>视觉效果</td>
+      <td>⭐⭐⭐⭐</td>
+      <td>⭐⭐⭐</td>
+      <td>⭐⭐⭐</td>
+      <td>⭐⭐⭐⭐⭐</td>
+    </tr>
+    <tr>
+      <td>分发触达</td>
+      <td>精准（投资人）</td>
+      <td>长尾（SEO）</td>
+      <td>即时（粉丝）</td>
+      <td>算法推荐</td>
+    </tr>
+    <tr>
+      <td>一次性投入后<br/>的复用成本</td>
+      <td>低</td>
+      <td>极低</td>
+      <td>极低</td>
+      <td>中</td>
+    </tr>
+  </table>
+
+  <h2>五、踩坑总结</h2>
+
+  <p><strong>教训1：不要在管线基础设施上做文章定制。</strong></p>
+  <p>公众号第一篇用了内联的图片URL、硬编码的文章内容、特定配图提示词。等到第二篇再用时完全不能复用。第二次直接写成通用脚本后，反而更省事。</p>
+
+  <p><strong>教训2：过渡方案不如一步到位。</strong></p>
+  <p>在视频环节走了弯路：先试MPT（质量不够）→再试PPT→视频（画面呆板）→最后HyperFrames。如果一开始就评估"这个视频需要定制的信息密度"，可以直接选HyperFrames。</p>
+
+  <p><strong>教训3：研究稿必须独立于任何产出格式。</strong></p>
+  <p>先写纯markdown研究稿，再从中提取各部分，比在每个产出中都重写一遍高效得多。研究稿就是数据层，各产出是表示层——这是经典的架构思路。</p>
+
+  <p><strong>教训4：预览模式早加。</strong></p>
+  <p>公众号v2加了--preview模式后，排版问题在10秒内发现，不用每次跑完整pipeline。HyperFrames的preview也类似——先预览再渲染，迭代速度快10倍。</p>
+
+  <h2>六、固化后的管线清单</h2>
+
+  <p>最终沉淀为CLAUDE.md中的几个触发短语：</p>
+
+  <ul>
+    <li><strong>「发公众号」</strong> → publish.mjs 管线（自动配图+上传+草稿）</li>
+    <li><strong>「视频管线」</strong> → HyperFrames 流程（脚本→TTS→HTML→render）</li>
+    <li><strong>「PPT」/「路演」</strong> → ppt-creation + HUIIHONG模版</li>
+  </ul>
+
+  <p>这些触发短语的好处是：下次再有任何主题，直接说对应的词，整个管线自动跑，不再需要重新设计流程。</p>
+
+  <h2>七、小结</h2>
+  <p>从"一个想法"到"四个成品"，总耗时不到2小时（含所有踩坑修复）。如果管线固化后再来一次同类任务，预估可以压缩到30分钟以内——<strong>研究5分钟 + 并行产出25分钟</strong>。</p>
+  <p>内容生产正在经历软件工程经历过的事情：从手工作坊到流水线，从单件定制到组件复用。区别在于，内容的质量天花板不是工具决定的，是研究和视角决定的。工具只负责让好的内容更快触达该触达的人。</p>
+  <p>最后送一句在这件事里对我触动最大的一句话：<strong>最稀缺的资源不是技术，是对内容的理解。</strong></p>
+
+  <p style="margin-top:2rem; padding:1rem; background:#f5f7fa; border-radius:6px; font-size:0.9rem; color:#666;">
+    本文涉及的所有项目文件：<br/>
+    公众号管线 → ~/Documents/wechat-publisher/publish.mjs<br/>
+    视频管线 → npx hyperframes init &#123;project&#125; 开始
+  </p>
+
+  <RelatedArticles currentSlug="ai-content-pipeline-experiment" />
+</BaseLayout>
+
+<style>
+  .back-link { display:inline-block; color:var(--text-muted); font-size:0.85rem; margin-bottom:1rem; }
+  .back-link:hover { color:var(--accent); text-decoration:none; }
+  h1 { font-size:1.8rem; line-height:1.25; margin-bottom:0.3rem; }
+  .article-meta { color:var(--text-muted); font-size:0.82rem; margin-bottom:0.8rem; }
+  .article-meta span { margin-right:0.6rem; }
+  .tags { margin-bottom:2rem; }
+  .tag { display:inline-block; background:var(--bg-elevated); color:var(--text-secondary); font-size:0.75rem; padding:0.15rem 0.55rem; border-radius:3px; margin-right:0.3rem; }
+  blockquote { background:var(--bg-elevated); border-left:3px solid var(--accent); margin:1.5rem 0; padding:0.8rem 1rem; font-size:0.95rem; color:var(--text-secondary); line-height:1.6; }
+  blockquote p { margin:0; }
+  h2 { font-size:1.25rem; margin-top:2.5rem; margin-bottom:0.8rem; padding-bottom:0.3rem; border-bottom:1px solid var(--border-light); }
+  h3 { font-size:1.05rem; margin-top:1.8rem; margin-bottom:0.4rem; }
+  p { line-height:1.7; margin-bottom:0.8rem; }
+  ul { padding-left:1.2rem; }
+  li { margin-bottom:0.4rem; line-height:1.6; }
+  strong { color:var(--text); }
+  table { width:100%; border-collapse:collapse; margin:1.2rem 0; font-size:0.88rem; }
+  th { background:var(--bg-elevated); padding:0.5rem 0.7rem; border:1px solid var(--border-light); font-weight:600; text-align:left; }
+  td { padding:0.5rem 0.7rem; border:1px solid var(--border-light); }
+  code { background:var(--bg-elevated); padding:0.1rem 0.35rem; border-radius:3px; font-size:0.85em; }
+</style>
