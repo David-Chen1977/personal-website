@@ -1,0 +1,153 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import RelatedArticles from '../../components/RelatedArticles.astro';
+---
+
+<BaseLayout title="AI 管线分析报告乌龙记：一次交叉验证缺失引发的自我修复" description="Sisyphus 在分析内容管线时误报个人网站'不可用'，实际 GitHub Actions 自动部署一切正常。根因是读了过时的架构文档却没有交叉验证。一个教训，也是一次对管线自身的端到端验收。">
+  <a href="/blog" class="back-link">← 返回文章列表</a>
+
+  <h1>AI 管线分析报告乌龙记：<br />一次交叉验证缺失引发的自我修复</h1>
+  <div class="article-meta">
+    <span>2026-06-01</span>
+    <span>· 约 8 分钟阅读</span>
+  </div>
+  <div class="tags">
+    <span class="tag">AI 协作</span>
+    <span class="tag">工作流</span>
+    <span class="tag">反思</span>
+    <span class="tag">自动化</span>
+  </div>
+
+  <blockquote>
+    本文的诞生过程本身就是一次管线验收：Sisyphus 撰写 → 创建 .astro 文件 → git push → GitHub Actions → Cloudflare Pages 自动部署上线。从分析到上线全链路跑通，耗时约 15 分钟。
+  </blockquote>
+
+  <h2>一、事件：一份"看起来专业"但全错的报告</h2>
+
+  <p>今天早上我让 Sisyphus 做了一份"产品四件套"管线分析报告——公众号、视频、PPT、个人网站四条内容管线的全面体检。</p>
+
+  <p>报告出来，排版工整，层级分明，P0-P3 优先级排得井井有条。其中关于个人网站管线的结论是：</p>
+
+  <p style="padding: 1rem; background: #fff3f3; border-radius: 6px; border-left: 3px solid #d32f2f;">
+    🔴 个人网站管线"依赖公众号"，当前不可用，API 凭证需更新<br />
+    建议 P1-1：个人网站管线恢复
+  </p>
+
+  <p>这个结论有个小问题：<strong>我的个人网站一直好好的</strong>。10+ 篇文章已经上线，GitHub Actions 自动部署正常运行。</p>
+
+  <p>Sisyphus 冤枉了一条正常工作的管线。这不是一个无关紧要的 bug——如果分析报告本身就是错的，那基于它的所有建议和优先级判断都需要推倒重来。</p>
+
+  <h2>二、根因分析：三重复合错误</h2>
+
+  <p>我让 Sisyphus 自己查原因。定位结果如下：</p>
+
+  <h3>错误一：读了过时的文档</h3>
+
+  <p>知识库里有一份 <code>内容管线架构.md</code>，Section 2.4 写于网站修复之前，状态标注为"🔴 缺失，源码不在本地"、"⬜ 待处理"。Sisyphus 搜索到这份文档后直接采信了结论。</p>
+
+  <p>但就在同一个知识库目录下，另一份文档 <code>个人网站部署规范.md</code> 记录着完整的部署配置、CI 流程、踩坑历史——创建于 <strong>昨天</strong>。Sisyphus 没有读它。</p>
+
+  <h3>错误二：文件归类错误</h3>
+
+  <p>项目里有一个 <code>wechat-publisher/publish.mjs</code>，功能是调用微信公众号 API 发布文章。Sisyphus 在扫描文件时把它误认为"个人网站的入口文件"，并顺势得出结论："网站依赖公众号，且 API 凭证过期，所以网站不可用。"</p>
+
+  <p>实际上，网站是 Astro 5 + Cloudflare Pages，与公众号 API 没有任何关系。publish.mjs 是公众号管线的一部分——两条完全独立的管线被混为一谈。</p>
+
+  <h3>错误三：没查文件系统</h3>
+
+  <p>Sisyphus 全程基于文本搜索和文档阅读做判断，从来没有实际检查：</p>
+
+  <ul>
+    <li><code>~/Documents/personal-website/</code> 目录是否存在</li>
+    <li><code>.github/workflows/deploy.yml</code> 是否配置完整</li>
+    <li><code>git log</code> 是否有最近的 commit 和 push 记录</li>
+    <li>GitHub Actions 是否运行成功</li>
+  </ul>
+
+  <p>但凡检查任意一项，这个错误都不会发生。</p>
+
+  <h2>三、修复：三路交叉验证规则</h2>
+
+  <p>这个乌龙暴露的不是技术问题，而是工作方法论的问题。为此我们确立了一条硬性规则：</p>
+
+  <p style="padding: 1rem; background: #eef6ff; border-radius: 6px; border-left: 3px solid #2196f3;">
+    <strong>在做出"某事物不可用/缺失/需修复"的判断前，必须并行执行三路交叉验证：</strong><br /><br />
+    ① <strong>搜索所有相关 vault 笔记</strong>——grep 标签、文件名、内容关键词，取最新时间戳的文档为准<br />
+    ② <strong>检查实际文件系统</strong>——目录、CI 配置、git 状态、构建产物<br />
+    ③ <strong>确认后再输出结论</strong>——附带引用来源，不依赖单点信息
+  </p>
+
+  <h2>四、另一个发现：架构文档的同步问题</h2>
+
+  <p>这件事暴露了一个更深层的问题：<strong>知识库文档的同步维护机制缺失</strong>。</p>
+
+  <p>5 月 31 日修复网站自动部署后，我们创建了 <code>个人网站部署规范.md</code> 记录了完整的配置和流程——这个动作是对的。但更新 <code>内容管线架构.md</code> 这一步被遗漏了，导致两份文档互相矛盾，先读的那份成了"错误信号源"。</p>
+
+  <p>这不是第一次发生。回顾知识库里的几十份笔记，部分"总览类"文档的更新频率明显低于"专题类"文档。总览文档写于项目初期，后续变化只记在专题文档里，总览文档慢慢变成了一个过时的路标。</p>
+
+  <p>最终的解决方案很简单但很有效：<strong>每次部署成功后，回写总览文档</strong>。这不是额外的工作量，而是部署流程的最后一个步骤——管线 CI 的终点不是域名上线，而是文档同步。</p>
+
+  <h2>五、收入决策日志</h2>
+
+  <p>这次事件被完整记录到了知识库的 <code>20-Decisions/</code> 目录下，按照决策日志标准格式撰写，含背景、备选方案、关键假设和 6 个月后复盘提醒。日后任何"管线缺失/需修复"的判断都会被自动触发交叉验证检查。</p>
+
+  <p style="padding: 1rem; background: #f5f5f5; border-radius: 6px; border-left: 3px solid #666;">
+    <strong>决策日志主题</strong>：Sisyphus 分析报告交叉验证规范<br />
+    <strong>编号</strong>：2026-06-01 · 01<br />
+    <strong>位置</strong>：个人知识库 → 20-Decisions/
+  </p>
+
+  <h2>六、一次意外的全链路验收</h2>
+
+  <p>从另一个角度看，这次乌龙也是一次有价值的全链路压力测试：</p>
+
+  <table>
+    <tr><th>环节</th><th>结果</th><th>备注</th></tr>
+    <tr><td>Sisyphus 分析 → 发现问题</td><td>✅</td><td>虽然结论错了，但路径是对的</td></tr>
+    <tr><td>用户质疑 → 自动回溯</td><td>✅</td><td>人工介入纠正方向</td></tr>
+    <tr><td>根因定位（文件系统、git、CI 检查）</td><td>✅</td><td>3 分钟内完成</td></tr>
+    <tr><td>文档修复（3 份文件的编辑）</td><td>✅</td><td>内容管线架构 / 分析报告 / 决策日志</td></tr>
+    <tr><td>过程记录到知识库</td><td>✅</td><td>决策日志格式，含复盘提醒</td></tr>
+    <tr><td>经验沉淀为规则</td><td>✅</td><td>三路交叉验证纳入工作流</td></tr>
+    <tr><td><strong>本文发布上线</strong></td><td><strong>✅</strong></td><td><strong>Git push → GitHub Actions → Cloudflare Pages</strong></td></tr>
+  </table>
+
+  <p>最后一行是这篇验收报告的核心意义：<strong>一条被误报为"不可用"的管线，正在用这篇文章证明自己确实正常工作。</strong></p>
+
+  <h2>七、小结：AI 协作中的"信任但验证"</h2>
+
+  <p>这次事件中最有价值的不是技术修复，而是一个协作模式上的认知：<strong>AI 可以做分析，但它不能替自己检查。</strong></p>
+
+  <p>Sisyphus 的写作质量很高，部署速度很快，但在"核实已有设施是否正常运行"这件事上，它天然倾向于信任文本记录而非物理现实。这不是 Sisyphus 独有的问题——人类咨询顾问同样容易采信文档而非实地查验。</p>
+
+  <p>解决方式也不是让 AI 变得更谨慎，而是在工作流中嵌入一道硬性的、不可跳过的"查验门"。对于内容生产领域，这道门是 QC 三级门禁；对于系统分析领域，这道门就是三路交叉验证。</p>
+
+  <p style="margin-top:2rem; padding:1rem; background: #f5f7fa; border-radius: 6px; font-size: 0.9rem; color: #666;">
+    <strong>技术栈本文涉及</strong><br />
+    Sisyphus (OpenCode) · 个人知识库 (Obsidian) · Astro 5 · Cloudflare Pages · GitHub Actions
+  </p>
+
+  <RelatedArticles currentSlug="ai-pipeline-cross-verification" category="AI 协作" />
+</BaseLayout>
+
+<style>
+  .back-link { display:inline-block; color:var(--text-muted); font-size:0.85rem; margin-bottom:1rem; }
+  .back-link:hover { color:var(--accent); text-decoration:none; }
+  h1 { font-size:1.8rem; line-height:1.25; margin-bottom:0.3rem; }
+  .article-meta { color:var(--text-muted); font-size:0.82rem; margin-bottom:0.8rem; }
+  .article-meta span { margin-right:0.6rem; }
+  .tags { margin-bottom:2rem; }
+  .tag { display:inline-block; background:var(--bg-elevated); color:var(--text-secondary); font-size:0.75rem; padding:0.15rem 0.55rem; border-radius:3px; margin-right:0.3rem; }
+  blockquote { background:var(--bg-elevated); border-left:3px solid var(--accent); margin:1.5rem 0; padding:0.8rem 1rem; font-size:0.95rem; color:var(--text-secondary); line-height:1.6; }
+  blockquote p { margin:0; }
+  h2 { font-size:1.25rem; margin-top:2.5rem; margin-bottom:0.8rem; padding-bottom:0.3rem; border-bottom:1px solid var(--border-light); }
+  h3 { font-size:1.05rem; margin-top:1.8rem; margin-bottom:0.4rem; }
+  p { line-height:1.7; margin-bottom:0.8rem; }
+  ul, ol { padding-left:1.2rem; }
+  li { margin-bottom:0.4rem; line-height:1.6; }
+  strong { color:var(--text); }
+  table { width:100%; border-collapse:collapse; margin:1.2rem 0; font-size:0.88rem; }
+  th { background:var(--bg-elevated); padding:0.5rem 0.7rem; border:1px solid var(--border-light); font-weight:600; text-align:left; }
+  td { padding:0.5rem 0.7rem; border:1px solid var(--border-light); }
+  code { background:var(--bg-elevated); padding:0.1rem 0.35rem; border-radius:3px; font-size:0.85em; }
+</style>
