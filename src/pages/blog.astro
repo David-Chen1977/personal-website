@@ -13,6 +13,7 @@ interface Article {
 }
 
 const articles: Article[] = [
+
   { slug: 'wechat-auto-publish', title: '微信公众号配图自动化：从 Playwright 挣扎到 API 闭环', desc: '用 Pollinations.ai 免费生图 + WeChat API 实现公众号图文自动配图，含 Playwright 自动化失败的踩坑实录。', date: '2026-05-29', readTime: '5 分钟', category: 'AI 协作' },
   { slug: 'suan-dian-xie-tong-deep-analysis', title: '算电协同深度分析：当算力遇上电力的结构性机会', desc: '底层逻辑从"电随算动"到"算随电动"，五大落地模式与四条投资主线的全面拆解。', date: '2026-05-29', readTime: '12 分钟', category: '算电协同' },
   { slug: 'suan-dian-xie-tong-AI', title: '算电协同：AI 下半场，电比芯片更稀缺', desc: '算力遇到电力瓶颈，中美两套体制给出了完全不同的应对逻辑。三层投资优先级和六个商业模式拆解。', date: '2026-05-28', readTime: '10 分钟', category: '算电协同' },
@@ -40,6 +41,7 @@ const articles: Article[] = [
   { slug: 'ai-pipeline-cross-verification', title: 'AI 管线分析报告乌龙记：交叉验证缺失引发的自我修复', desc: 'Sisyphus 误报个人网站"不可用"，实际一切正常。根因分析、修复过程和一条新确立的交叉验证规则。这篇文章本身就是管线验收。', date: '2026-06-01', readTime: '8 分钟', category: 'AI 协作' },
   { slug: 'carbon-electric-compute-synergy', title: '双碳考核收紧 × 碳市场扩容 × 算力出海：2026年碳电算协同深度分析', desc: '2026年4月碳排放双控首次纳入党内法规，碳市场覆盖排放量达80亿吨，算力中心用电量逼近2000亿千瓦时。三条主线同时收紧下的投资判断。', date: '2026-06-01', readTime: '15 分钟', category: '政策解读' },
   { slug: 'wechat-pipeline-iteration', title: '公众号发布管线迭代实录：从「基本能用」到「不必盯着」', desc: '一条公众号发布脚本从最初能跑，到六七轮迭代后变成自动排版、配图、质检、草稿一体化管线——六轮迭代实录与AI协作模式反思。', date: '2026-06-01', readTime: '10 分钟', category: 'AI 协作' },
+  { slug: 'article-to-ppt-pipeline', title: '别人还在手动排版时，我已经用AI秒出PPT了', desc: '一份2000字的文章，AI自动拆结构、提炼重点、匹配模板、生成PPT。30秒搞定——这是 Sisyphus 管线自动编排的真实结果。', date: '2026-06-03', readTime: '8 分钟', category: 'AI 协作' },
 ];
 const sorted = articles.sort((a, b) => b.date.localeCompare(a.date));
 ---
