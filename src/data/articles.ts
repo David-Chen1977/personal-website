@@ -23,6 +23,7 @@ export const categories: string[] = [
   '投资方法论',
   '个人投资',
   'AI 协作',
+  '氢能',
 ];
 
 export const articles: Article[] = [
@@ -83,6 +84,9 @@ export const articles: Article[] = [
 
   // ── 个人投资 ──
   { slug: 'tou-zi-ben-zhi-qi-ye-xian-jin-liu', title: '投资的本质就是投资企业未来现金流', desc: '买股票就是买公司，买公司就是买其未来现金流的折现。个人投资专栏的开篇，也是整个投资体系的基石信念。', date: '2026-05-30', readTime: '约 15 分钟阅读', category: '个人投资', tags: ['投资', '现金流', '价值投资'] },
+
+  // ── 氢能 ──
+  { slug: '氢能投资的拐点到了吗', title: '氢能投资的拐点到了吗？', desc: '2026年上半年，一边是50亿项目停摆，一边是17家氢能企业拿到融资。氢能产业到底是冷是热？我的判断：真正的拐点不是政策拐点，而是经济性拐点。', date: '2026-06-12', readTime: '约 15 分钟阅读', category: '氢能', tags: ['氢能', '投资分析', '深度分析', '政策解读'] },
 ];
 
 // ── Helper functions ──
