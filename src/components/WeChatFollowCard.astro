@@ -1,0 +1,109 @@
+---
+// 公众号关注卡片 — 用于文章底部
+// 将 /public/images/qrcode-wechat.jpg 替换为实际公众号二维码
+// 公众号名称和ID根据实际情况修改
+---
+
+<div class="wechat-follow-card">
+  <div class="wechat-follow-inner">
+    <div class="wechat-qr-section">
+      <div class="wechat-qr-placeholder">
+        <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="100" height="100" rx="8" fill="var(--bg-elevated)"/>
+          <rect x="18" y="18" width="28" height="28" rx="4" fill="var(--accent)" fill-opacity="0.15" stroke="var(--accent)" stroke-width="1.5"/>
+          <rect x="54" y="18" width="28" height="28" rx="4" fill="var(--accent)" fill-opacity="0.15" stroke="var(--accent)" stroke-width="1.5"/>
+          <rect x="36" y="54" width="28" height="28" rx="4" fill="var(--accent)" fill-opacity="0.15" stroke="var(--accent)" stroke-width="1.5"/>
+          <rect x="54" y="54" width="28" height="28" rx="4" fill="var(--accent)" fill-opacity="0.15" stroke="var(--accent)" stroke-width="1.5"/>
+        </svg>
+        <span class="qrcode-hint">公众号二维码</span>
+      </div>
+    </div>
+    <div class="wechat-info-section">
+      <div class="wechat-name">道雷说道</div>
+      <div class="wechat-desc">每周推送投资框架与行业研究心得</div>
+      <div class="wechat-benefits">
+        <div class="benefit-item">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="3.5" fill="var(--accent)" fill-opacity="0.2"/><circle cx="7" cy="7" r="2" fill="var(--accent)"/></svg>
+          <span>深度研究抢先看</span>
+        </div>
+        <div class="benefit-item">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="3.5" fill="var(--accent)" fill-opacity="0.2"/><circle cx="7" cy="7" r="2" fill="var(--accent)"/></svg>
+          <span>每周更新通知</span>
+        </div>
+        <div class="benefit-item">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="3.5" fill="var(--accent)" fill-opacity="0.2"/><circle cx="7" cy="7" r="2" fill="var(--accent)"/></svg>
+          <span>互动交流探讨</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .wechat-follow-card {
+    margin: 2.5rem 0 1.5rem;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-card);
+    background: var(--bg-card);
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .wechat-follow-card:hover {
+    box-shadow: var(--shadow-card-hover);
+  }
+  .wechat-follow-inner {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem 2rem;
+  }
+  .wechat-qr-section {
+    flex-shrink: 0;
+  }
+  .wechat-qr-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    width: 100px;
+  }
+  .wechat-qr-placeholder img {
+    width: 100px;
+    height: 100px;
+    border-radius: 6px;
+    display: block;
+  }
+  .qrcode-hint {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+  .wechat-info-section {
+    flex: 1;
+    min-width: 0;
+  }
+  .wechat-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.25rem;
+  }
+  .wechat-desc {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem;
+    line-height: 1.4;
+  }
+  .wechat-benefits {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+  }
+  .benefit-item {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+  }
+</style>

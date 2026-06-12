@@ -5,8 +5,11 @@ export interface Props {
   wide?: boolean;
 }
 
+import WeChatFollowCard from '../components/WeChatFollowCard.astro';
+
 const { title, description, wide } = Astro.props;
 const currentPath = Astro.url.pathname;
+const isArticlePage = currentPath.startsWith('/blog/') && !currentPath.includes('/category/') && !currentPath.includes('/tags/') && currentPath !== '/blog' && currentPath !== '/blog/';
 ---
 
 <!doctype html>
@@ -274,6 +277,25 @@ const currentPath = Astro.url.pathname;
         border: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
       }
 
+      /* === Article Preview Banner === */
+      .article-preview-banner {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.6rem 1rem;
+        margin-bottom: 2rem;
+        background: var(--accent-bg);
+        border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+        border-radius: var(--radius-sm);
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        line-height: 1.4;
+      }
+      .article-preview-banner .banner-divider {
+        margin: 0 0.4rem;
+        color: var(--border);
+      }
+
       /* === Back link === */
       .back-link {
         display: inline-flex; align-items: center; gap: 0.3rem;
@@ -342,7 +364,17 @@ const currentPath = Astro.url.pathname;
     </nav>
 
     <main class={wide ? 'wide' : ''}>
+      {isArticlePage && (
+        <div class="article-preview-banner">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="flex-shrink:0">
+            <rect x="1" y="2" width="12" height="10" rx="2" stroke="currentColor" stroke-width="1.2" fill="none"/>
+            <path d="M4 6h6M4 8.5h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+          <span>本文同步发布于公众号「道雷说道」<span class="banner-divider">|</span>关注获取最新研究与推送</span>
+        </div>
+      )}
       <slot />
+      {isArticlePage && <WeChatFollowCard />}
     </main>
 
     <footer>
