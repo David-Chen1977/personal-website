@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import RelatedArticles from '../../components/RelatedArticles.astro';
+import ArticleNav from '../../components/ArticleNav.astro';
 ---
 
 <BaseLayout title="HUIIHONG PPT 模版开发：从AI协作到可复用技能的全记录" description="用 python-pptx 为汇竑资本开发 PPT 自动生成模版的十轮迭代过程——从精确测量、图标系统演进、语义化映射，到最终封装为可复用技能。">
@@ -163,4 +164,5 @@ for slide in prs.slides:
   <p>相关的开发记录已沉淀为 OpenCode 技能，完整代码见 <code>~/.agents/skills/huihong-ppt/</code>。</p>
 
 <RelatedArticles currentSlug="huihong-ppt-dev-journey" category="AI 协作" />
+  <ArticleNav slug="huihong-ppt-dev-journey" />
 </BaseLayout>

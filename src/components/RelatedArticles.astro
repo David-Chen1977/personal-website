@@ -1,32 +1,13 @@
 ---
+import { getRelatedArticles } from '../data/articles';
+
 export interface Props {
   currentSlug: string;
   category: string;
 }
 
 const { currentSlug, category } = Astro.props;
-
-interface Article {
-  slug: string;
-  title: string;
-  category: string;
-}
-
-const allArticles: Article[] = [
-  { slug: 'liu-zhang-wang-deep', title: '六张网规划实施方案深度解读', category: '政策解读' },
-  { slug: 'liu-zhang-wang', title: '>7万亿！六张网同时开建，这波基建红利对普通人意味着什么？', category: '政策解读' },
-  { slug: 'suan-dian-xie-tong-2', title: '算电协同产业链拆解：利润池在哪里？', category: '算电协同' },
-  { slug: 'suan-dian-xie-tong-1', title: '算电协同：为什么这是未来五年确定性很高的投资主题', category: '算电协同' },
-  { slug: 'impossible-triangle', title: '不可能铁三角与战略分层定价：华为思路对投资的启示', category: '投资方法论' },
-  { slug: 'ppt-quality-lessons', title: 'PPT 布局质量迭代：从 57 个问题到零缺陷', category: 'AI 协作' },
-  { slug: 'huihong-ppt-dev-journey', title: 'HUIIHONG PPT 模版开发：从AI协作到可复用技能的全记录', category: 'AI 协作' },
-  { slug: 'wechat-pipeline-iteration', title: '公众号发布管线迭代实录：从「基本能用」到「不必盯着」', category: 'AI 协作' },
-  { slug: 'di-di-sha-ru-dian-li-shi-chang', title: '滴滴杀入电力市场：巨头入局背后的底层逻辑与未来格局', category: '电力市场' },
-  { slug: 'tou-zi-ben-zhi-qi-ye-xian-jin-liu', title: '投资的本质就是投资企业未来现金流', category: '个人投资' },
-  { slug: 'zu-he-tou-zi-yin-zi-tou-zi', title: '组合投资和因子投资对房地产投资策略的启示', category: '投资方法论' },
-];
-
-const related = allArticles.filter(a => a.category === category && a.slug !== currentSlug);
+const related = getRelatedArticles(currentSlug, category);
 ---
 
 {related.length > 0 && (

@@ -1,0 +1,111 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { articles } from '../../../data/articles';
+
+export function getStaticPaths() {
+  const tagSet = new Set<string>();
+  for (const a of articles) {
+    if (a.tags) for (const t of a.tags) tagSet.add(t);
+  }
+  return [...tagSet].map((tag) => ({
+    params: { tag },
+    props: { tag },
+  }));
+}
+
+const { tag } = Astro.props;
+const tagged = articles
+  .filter((a) => a.tags?.includes(tag))
+  .sort((a, b) => b.date.localeCompare(a.date));
+---
+
+<BaseLayout title={`${tag} - 标签`} description={`标签「${tag}」下的所有文章`} wide>
+  <a href="/blog/tags" class="back-link">← 返回标签列表</a>
+
+  <div class="page-head">
+    <h1>{tag}</h1>
+    <p class="page-desc">
+      共 <strong>{tagged.length}</strong> 篇文章
+    </p>
+  </div>
+
+  <div class="article-list">
+    {tagged.map((a) => (
+      <article class="article-row">
+        <a href={`/blog/${a.slug}`} class="row-link">
+          <div class="row-body">
+            <div class="row-category">{a.category}</div>
+            <h3 class="row-title">{a.title}</h3>
+            <p class="row-desc">{a.desc}</p>
+            <div class="row-meta">{a.date} · {a.readTime}</div>
+          </div>
+        </a>
+      </article>
+    ))}
+  </div>
+</BaseLayout>
+
+<style>
+  .page-head {
+    margin-bottom: 2rem;
+  }
+  .page-head h1 {
+    margin-bottom: 0.3rem;
+  }
+  .page-desc {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+  }
+
+  .article-list {
+    display: flex;
+    flex-direction: column;
+  }
+  .article-row {
+    border-bottom: 1px solid var(--border-light);
+    transition: background 0.15s;
+  }
+  .article-row:last-child {
+    border-bottom: none;
+  }
+  .article-row:hover {
+    background: var(--bg-elevated);
+    border-radius: 6px;
+    margin: 0 -0.75rem;
+    padding: 0 0.75rem;
+  }
+  .row-link {
+    display: block;
+    padding: 1.25rem 0;
+    text-decoration: none;
+    color: inherit;
+  }
+  .row-category {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    margin-bottom: 0.25rem;
+  }
+  .row-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0 0 0.3rem;
+    line-height: 1.35;
+    transition: color 0.15s;
+  }
+  .article-row:hover .row-title {
+    color: var(--accent);
+  }
+  .row-desc {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.45;
+    margin: 0 0 0.3rem;
+  }
+  .row-meta {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+</style>

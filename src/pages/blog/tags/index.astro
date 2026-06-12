@@ -1,0 +1,90 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { articles } from '../../../data/articles';
+
+// Collect all unique tags with counts
+const tagMap = new Map<string, number>();
+for (const a of articles) {
+  if (a.tags) {
+    for (const t of a.tags) {
+      tagMap.set(t, (tagMap.get(t) || 0) + 1);
+    }
+  }
+}
+const sortedTags = [...tagMap.entries()].sort((a, b) => b[1] - a[1]);
+const maxCount = sortedTags.length > 0 ? sortedTags[0][1] : 1;
+---
+
+<BaseLayout title="标签" description="按标签浏览文章" wide>
+  <a href="/blog" class="back-link">← 返回文章列表</a>
+
+  <div class="page-head">
+    <h1>标签</h1>
+    <p class="page-desc">
+      共 <strong>{tagMap.size}</strong> 个标签
+    </p>
+  </div>
+
+  <div class="tag-cloud">
+    {sortedTags.map(([tag, count]) => {
+      const size = 0.8 + (count / maxCount) * 0.6;
+      const opacity = 0.55 + (count / maxCount) * 0.45;
+      return (
+        <a
+          href={`/blog/tags/${encodeURIComponent(tag)}`}
+          class="tag-item"
+          style={`font-size: ${size}rem; opacity: ${opacity};`}
+        >
+          {tag}
+          <span class="tag-count">({count})</span>
+        </a>
+      );
+    })}
+  </div>
+</BaseLayout>
+
+<style>
+  .page-head {
+    margin-bottom: 2rem;
+  }
+  .page-head h1 {
+    margin-bottom: 0.3rem;
+  }
+  .page-desc {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+  }
+
+  .tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1rem;
+    padding: 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-card);
+    align-items: center;
+    justify-content: center;
+  }
+  .tag-item {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.2rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    color: var(--accent);
+    text-decoration: none;
+    transition: all 0.15s;
+    line-height: 1.4;
+    white-space: nowrap;
+  }
+  .tag-item:hover {
+    background: var(--accent-bg);
+    color: var(--accent-hover);
+    text-decoration: none;
+  }
+  .tag-count {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+  }
+</style>

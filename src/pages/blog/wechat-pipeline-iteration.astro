@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import RelatedArticles from '../../components/RelatedArticles.astro';
+import ArticleNav from '../../components/ArticleNav.astro';
 ---
 
 <BaseLayout title="公众号发布管线迭代实录：从「基本能用」到「不必盯着」" description="一条公众号发布脚本从最初能跑，到六七轮迭代后变成自动排版、配图、质检、草稿一体化管线——这不仅仅是修 bug，更是一次 AI 协作模式的实验记录。">
@@ -252,4 +253,5 @@ import RelatedArticles from '../../components/RelatedArticles.astro';
   </p>
 
 <RelatedArticles currentSlug="wechat-pipeline-iteration" category="AI 协作" />
+  <ArticleNav slug="wechat-pipeline-iteration" />
 </BaseLayout>

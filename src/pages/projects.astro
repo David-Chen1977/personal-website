@@ -6,9 +6,29 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <a href="/" class="back-link">← 返回首页</a>
 
   <h1>作品</h1>
-  <p style="margin-bottom: 2rem;">已完成的主要项目和产出物。</p>
+  <p style="margin-bottom: 2rem;">已完成的主要项目、产出物和工具系统。</p>
 
   <div class="project-grid">
+    <article class="project-card">
+      <div class="project-cover" style="background: linear-gradient(135deg, #ff453a 0%, #ff6b6b 100%);">
+        <span class="project-cover-icon">🧠</span>
+      </div>
+      <div class="project-body">
+        <h2>结构化数据基础模型（TFM）投资分析报告</h2>
+        <div class="tags">
+          <span class="tag">AI 产业投资</span>
+          <span class="tag">TFM</span>
+          <span class="tag">稳准智能</span>
+          <span class="tag">估值分析</span>
+        </div>
+        <p>全球 TFM 赛道全景扫描：Fundamental $255M A 轮到 SAP 超 €1B 收购 Prior Labs，中国唯一对标企业稳准智能在 20 亿估值下的价值评估。覆盖赛道逻辑、全球竞争格局、财务模型与风险分析。</p>
+        <div class="project-meta">
+          <span>报告 · 网站文章 · PPT</span>
+          <span>2026-06</span>
+        </div>
+      </div>
+    </article>
+
     <article class="project-card">
       <div class="project-cover" style="background: linear-gradient(135deg, #1e3a5f 0%, #2d6a9f 100%);">
         <span class="project-cover-icon">📊</span>
@@ -66,23 +86,42 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </article>
 
     <article class="project-card">
-      <div class="project-cover" style="background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);">
-        <span class="project-cover-icon">📝</span>
+      <div class="project-cover" style="background: linear-gradient(135deg, #0a5c36 0%, #1a8a5c 100%);">
+        <span class="project-cover-icon">🔧</span>
       </div>
       <div class="project-body">
-        <h2>合同条款辅助工具</h2>
+        <h2>QC 质检门禁系统</h2>
         <div class="tags">
-          <span class="tag">工具开发</span>
-          <span class="tag">法律科技</span>
+          <span class="tag">内容管线</span>
+          <span class="tag">质量保障</span>
+          <span class="tag">自动化</span>
         </div>
-        <p>智能合同条款起草辅助工具，支持条款模板管理、历史条款检索、风险条款审查。</p>
+        <p>10 项质检规则覆盖排版、引用合规、链接有效性、OCR 问题检测等维度。支持自动修复（--qc-fix），已集成到微信公众号发布管线，确保每次交付质量。</p>
         <div class="project-meta">
-          <span>Web App</span>
-          <span>2026-04</span>
+          <span>Python · CLI · 管线集成</span>
+          <span>2026-06</span>
         </div>
       </div>
     </article>
-  </div>
+
+    <article class="project-card">
+      <div class="project-cover" style="background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);">
+        <span class="project-cover-icon">📡</span>
+      </div>
+      <div class="project-body">
+        <h2>AI 内容管线系统</h2>
+        <div class="tags">
+          <span class="tag">AI 协作</span>
+          <span class="tag">管线</span>
+          <span class="tag">多平台交付</span>
+        </div>
+        <p>同一份研究自动产出 PPT、网站文章、公众号文章。集成选题感知、外部信号扫描、QC 门禁、自动配图（Pollinations.ai）、微信公众号 API 发布全流程。从研究到交付全自动化。</p>
+        <div class="project-meta">
+          <span>OpenCode · Python · 多工具链</span>
+          <span>2026-05~06</span>
+        </div>
+      </div>
+    </article>
 
   <div class="disclaimer">
     * 具体文件和信息因保密原因未公开发布。如需了解详情，欢迎联系。

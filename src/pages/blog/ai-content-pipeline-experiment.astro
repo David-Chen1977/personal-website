@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import RelatedArticles from '../../components/RelatedArticles.astro';
+import ArticleNav from '../../components/ArticleNav.astro';
 ---
 
 <BaseLayout title="一个主题，4个产出：我用AI搭了一条从研究到交付的内容管线" description="同一份研究，同时产出PPT、网站文章、公众号文章、视频。技术栈对比和实战避坑记录。">
@@ -171,6 +172,7 @@ import RelatedArticles from '../../components/RelatedArticles.astro';
   </p>
 
   <RelatedArticles currentSlug="ai-content-pipeline-experiment" />
+  <ArticleNav slug="ai-content-pipeline-experiment" />
 </BaseLayout>
 
 <style>

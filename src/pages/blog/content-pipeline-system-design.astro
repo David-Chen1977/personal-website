@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import RelatedArticles from '../../components/RelatedArticles.astro';
+import ArticleNav from '../../components/ArticleNav.astro';
 ---
 
 <BaseLayout title="内容管线2.0：从一次实验到自动化生产系统" description="几个月时间，我把一次性的内容生产实验，演化为一个由选题感知、外部信号扫描、QC门禁支撑的自动化管线系统。现状分析与优化路线图。">
@@ -203,6 +204,7 @@ import RelatedArticles from '../../components/RelatedArticles.astro';
   </p>
 
   <RelatedArticles currentSlug="content-pipeline-system-design" category="AI 协作" />
+  <ArticleNav slug="content-pipeline-system-design" />
 </BaseLayout>
 
 <style>

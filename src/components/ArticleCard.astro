@@ -5,15 +5,15 @@ export interface Props {
   desc: string;
   date: string;
   readTime: string;
-  tag: string;
+  category: string;
 }
 
-const { slug, title, desc, date, readTime, tag } = Astro.props;
+const { slug, title, desc, date, readTime, category } = Astro.props;
 ---
 
 <li class="article-card">
   <a href={`/blog/${slug}`} class="card-link">
-    <div class="card-tag">{tag}</div>
+    <div class="card-category">{category}</div>
     <h3 class="card-title">{title}</h3>
     <p class="card-desc">{desc}</p>
     <div class="card-meta">{date} · {readTime}</div>
@@ -55,7 +55,7 @@ const { slug, title, desc, date, readTime, tag } = Astro.props;
     color: inherit;
   }
   .card-link:hover { text-decoration: none; }
-  .card-tag {
+  .card-category {
     font-size: 0.72rem;
     font-weight: 600;
     color: var(--accent);

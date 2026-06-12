@@ -1,0 +1,115 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { categories, getArticlesByCategory } from '../../../data/articles';
+
+export function getStaticPaths() {
+  return categories.map((cat) => ({
+    params: { category: cat },
+    props: { category: cat },
+  }));
+}
+
+const { category } = Astro.props;
+const articles = getArticlesByCategory(category);
+---
+
+<BaseLayout title={`${category} - 分类`} description={`「${category}」分类下的所有文章`} wide>
+  <a href="/blog" class="back-link">← 返回文章列表</a>
+
+  <div class="page-head">
+    <h1>{category}</h1>
+    <p class="page-desc">
+      共 <strong>{articles.length}</strong> 篇文章
+    </p>
+  </div>
+
+  <div class="article-list">
+    {articles.length > 0 ? (
+      articles.map((a) => (
+        <article class="article-row">
+          <a href={`/blog/${a.slug}`} class="row-link">
+            <div class="row-body">
+              <h3 class="row-title">{a.title}</h3>
+              <p class="row-desc">{a.desc}</p>
+              <div class="row-meta">{a.date} · {a.readTime}</div>
+            </div>
+          </a>
+        </article>
+      ))
+    ) : (
+      <div class="empty-state">
+        <p>该分类暂无文章。</p>
+      </div>
+    )}
+  </div>
+</BaseLayout>
+
+<style>
+  .page-head {
+    margin-bottom: 2rem;
+  }
+  .page-head h1 {
+    margin-bottom: 0.3rem;
+  }
+  .page-desc {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+  }
+
+  .article-list {
+    display: flex;
+    flex-direction: column;
+  }
+  .article-row {
+    border-bottom: 1px solid var(--border-light);
+    transition: background 0.15s;
+  }
+  .article-row:last-child {
+    border-bottom: none;
+  }
+  .article-row:hover {
+    background: var(--bg-elevated);
+    border-radius: 6px;
+    margin: 0 -0.75rem;
+    padding: 0 0.75rem;
+  }
+  .row-link {
+    display: block;
+    padding: 1.25rem 0;
+    text-decoration: none;
+    color: inherit;
+  }
+  .row-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0 0 0.3rem;
+    line-height: 1.35;
+    transition: color 0.15s;
+  }
+  .article-row:hover .row-title {
+    color: var(--accent);
+  }
+  .row-desc {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.45;
+    margin: 0 0 0.3rem;
+  }
+  .row-meta {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    background: var(--bg-card);
+    border: 1px dashed var(--border-light);
+    border-radius: var(--radius-card);
+  }
+  .empty-state p {
+    font-size: 1rem;
+    color: var(--text-secondary);
+  }
+</style>

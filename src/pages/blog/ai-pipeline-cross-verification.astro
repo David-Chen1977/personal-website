@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import RelatedArticles from '../../components/RelatedArticles.astro';
+import ArticleNav from '../../components/ArticleNav.astro';
 ---
 
 <BaseLayout title="AI 管线分析报告乌龙记：一次交叉验证缺失引发的自我修复" description="Sisyphus 在分析内容管线时误报个人网站'不可用'，实际 GitHub Actions 自动部署一切正常。根因是读了过时的架构文档却没有交叉验证。一个教训，也是一次对管线自身的端到端验收。">
@@ -128,6 +129,7 @@ import RelatedArticles from '../../components/RelatedArticles.astro';
   </p>
 
   <RelatedArticles currentSlug="ai-pipeline-cross-verification" category="AI 协作" />
+  <ArticleNav slug="ai-pipeline-cross-verification" />
 </BaseLayout>
 
 <style>

@@ -1,0 +1,165 @@
+---
+import { getAdjacentArticles, getSeriesArticles, articles } from '../data/articles';
+
+export interface Props {
+  slug: string;
+}
+
+const { slug } = Astro.props;
+const { prev, next } = getAdjacentArticles(slug);
+const series = getSeriesArticles(slug);
+const current = articles.find(a => a.slug === slug);
+---
+
+{/* ── Series Navigation ── */}
+{series && series.length > 1 && (
+  <div class="series-section">
+    <div class="series-label">系列：{current?.series?.name}</div>
+    <div class="series-list">
+      {series.map((a, i) => (
+        <a
+          href={`/blog/${a.slug}`}
+          class={`series-item${a.slug === slug ? ' active' : ''}`}
+        >
+          <span class="series-order">{i + 1}</span>
+          <span class="series-title">{a.title}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+)}
+
+{/* ── Prev / Next ── */}
+{(prev || next) && (
+  <nav class="prevnext">
+    {next ? (
+      <a href={`/blog/${next.slug}`} class="prevnext-link prev">
+        <span class="prevnext-dir">← 上一篇</span>
+        <span class="prevnext-title">{next.title}</span>
+      </a>
+    ) : <div />}
+    {prev ? (
+      <a href={`/blog/${prev.slug}`} class="prevnext-link next">
+        <span class="prevnext-dir">下一篇 →</span>
+        <span class="prevnext-title">{prev.title}</span>
+      </a>
+    ) : <div />}
+  </nav>
+)}
+
+<style>
+  /* ── Series ── */
+  .series-section {
+    margin: 2.5rem 0;
+    padding: 1.25rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-card);
+  }
+  .series-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+  }
+  .series-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  .series-item {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.5rem 0.65rem;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    transition: background 0.15s;
+    color: var(--text-secondary);
+  }
+  .series-item:hover {
+    background: var(--accent-bg);
+    text-decoration: none;
+  }
+  .series-item.active {
+    background: var(--accent-bg);
+    border-left: 2px solid var(--accent);
+    color: var(--text);
+  }
+  .series-order {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--bg-elevated);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+  .series-item.active .series-order {
+    background: var(--accent);
+    color: #fff;
+  }
+  .series-title {
+    font-size: 0.88rem;
+    line-height: 1.35;
+  }
+
+  /* ── Prev / Next ── */
+  .prevnext {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin: 2.5rem 0;
+  }
+  .prevnext-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 1rem 1.25rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-card);
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .prevnext-link:hover {
+    border-color: var(--accent);
+    background: var(--accent-bg);
+    text-decoration: none;
+  }
+  .prevnext-link.next {
+    text-align: right;
+  }
+  .prevnext-dir {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  .prevnext-title {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .prevnext-link:hover .prevnext-title {
+    color: var(--accent);
+  }
+
+  @media (max-width: 640px) {
+    .prevnext {
+      grid-template-columns: 1fr;
+    }
+    .prevnext-link.next {
+      text-align: left;
+    }
+  }
+</style>

@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import RelatedArticles from '../../components/RelatedArticles.astro';
+import ArticleNav from '../../components/ArticleNav.astro';
 ---
 
 <BaseLayout title="别人还在手动排版时，我已经用AI秒出PPT了" description="一份2000字的文章，AI自动拆结构、提炼重点、匹配模板、生成PPT。30秒搞定，不是噱头——是这次亲测的真实结果。">
@@ -90,6 +91,7 @@ import RelatedArticles from '../../components/RelatedArticles.astro';
   </p>
 
   <RelatedArticles currentSlug="article-to-ppt-pipeline" />
+  <ArticleNav slug="article-to-ppt-pipeline" />
 </BaseLayout>
 
 <style>
