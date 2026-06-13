@@ -92,6 +92,10 @@ export const articles: Article[] = [
   { slug: 'ai-infrastructure-three-investment-tracks', title: 'AI基础设施投资的三条主线：算电协同、钠电储能与液冷系统', desc: '当GPU单芯片功耗突破2300W、全球数据中心用电量将在2030年逼近1万亿kWh时，AI的瓶颈早已不是算力本身，而是支撑算力的能源基础设施。本文从PE/VC视角，拆解算电协同、钠电储能与液冷系统三条赛道的投资逻辑与落地节奏。', date: '2026-06-14', readTime: '约 12 分钟阅读', category: '投资方法论', tags: ['算电协同', '钠电', '液冷', 'AI基础设施', 'PE投资'] },
   { slug: 'liquid-cooling-pe-investment-map', title: '液冷赛道PE投资地图：千亿市场的六大主题与全球标的矩阵', desc: '本文定位一级市场股权投资视角，聚焦未上市公司、产业整合机会、技术壁垒评估和商业模式闭环。液冷赛道处于基础设施范式转移早期阶段，渗透率从14%到50%+的跨越将在3年内完成。', date: '2026-06-14', readTime: '约 12 分钟阅读', category: '投资方法论', tags: ['液冷', 'PE投资', '冷却液', 'AI基础设施', '数据中心'] },
   { slug: 'aidc-two-strong-comparison', title: 'AIDC赛道两强对比：润泽科技狂奔、数据港追赶，算电协同谁主沉浮？', desc: '本文基于2026年6月最新财报与公开数据，对算电协同赛道两家核心A股标的进行深度对比分析，供PE/VC及行业研究参考。', date: '2026-06-14', readTime: '约 8 分钟阅读', category: '算电协同', tags: ['算电协同', 'AIDC', '润泽科技', '数据港', 'IDC'] },
+
+  // ── 三件套扩展：冷却液材料 ──
+  { slug: 'coolant-material-pe-investment', title: '液冷赛道PE投资地图：冷却液材料的百亿国产替代机会', desc: '3M Novec系列占全球冷却液35-40%的市场份额，2025年底正式停产。留下的结构性供给缺口至少需要3-5年填补。PE最应关注的液冷耗材级赛道。', date: '2026-06-14', readTime: '约 10 分钟阅读', category: '投资方法论', tags: ['液冷', '冷却液', 'PE投资', '数据中心', '国产替代'] },
+  { slug: 'aidc-green-electricity-pe-investment', title: 'AIDC绿电一体化：算电协同政策落地下的PE/VC机会图谱', desc: '2026年5月PUE≤1.15硬约束全面生效，算电协同从概念进入执行阶段。PE的核心机会不在IDC运营本身，而在配套的能源数字化、绿电聚合、储能运维和微电网四个子方向。', date: '2026-06-14', readTime: '约 10 分钟阅读', category: '投资方法论', tags: ['算电协同', 'AIDC', '绿电', 'PE投资', '储能运维'] },
 ];
 
 // ── Helper functions ──
