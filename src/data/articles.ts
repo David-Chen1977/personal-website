@@ -96,6 +96,9 @@ export const articles: Article[] = [
   // ── 三件套扩展：冷却液材料 ──
   { slug: 'coolant-material-pe-investment', title: '液冷赛道PE投资地图：冷却液材料的百亿国产替代机会', desc: '3M Novec系列占全球冷却液35-40%的市场份额，2025年底正式停产。留下的结构性供给缺口至少需要3-5年填补。PE最应关注的液冷耗材级赛道。', date: '2026-06-14', readTime: '约 10 分钟阅读', category: '投资方法论', tags: ['液冷', '冷却液', 'PE投资', '数据中心', '国产替代'] },
   { slug: 'aidc-green-electricity-pe-investment', title: 'AIDC绿电一体化：算电协同政策落地下的PE/VC机会图谱', desc: '2026年5月PUE≤1.15硬约束全面生效，算电协同从概念进入执行阶段。PE的核心机会不在IDC运营本身，而在配套的能源数字化、绿电聚合、储能运维和微电网四个子方向。', date: '2026-06-14', readTime: '约 10 分钟阅读', category: '投资方法论', tags: ['算电协同', 'AIDC', '绿电', 'PE投资', '储能运维'] },
+
+  // ── 算随电动 ──
+  { slug: 'compute-follows-electricity-virtual-power-plant', title: '算随电动：数据中心虚拟电厂首单交易的商业逻辑', desc: '2026年5月14日，国内首次实现大型数据中心以虚拟电厂形式参与电力现货交易。数据中心从用电巨兽变身电网柔性资源，虚拟电厂平台成为算电协同时代最确定的管道型机会。', date: '2026-06-15', readTime: '约 12 分钟阅读', category: '虚拟电厂', tags: ['算电协同', '虚拟电厂', '数据中心', '电力现货', '算随电动'] },
 ];
 
 // ── Helper functions ──
