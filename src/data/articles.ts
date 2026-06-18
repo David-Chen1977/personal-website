@@ -99,6 +99,9 @@ export const articles: Article[] = [
 
   // ── 算随电动 ──
   { slug: 'compute-follows-electricity-virtual-power-plant', title: '算随电动：数据中心虚拟电厂首单交易的商业逻辑', desc: '2026年5月14日，国内首次实现大型数据中心以虚拟电厂形式参与电力现货交易。数据中心从用电巨兽变身电网柔性资源，虚拟电厂平台成为算电协同时代最确定的管道型机会。', date: '2026-06-15', readTime: '约 12 分钟阅读', category: '虚拟电厂', tags: ['算电协同', '虚拟电厂', '数据中心', '电力现货', '算随电动'] },
+
+  // ── 推理改写算电协同 ──
+  { slug: 'inference-reshapes-compute-electricity-synergy', title: 'AI推理爆发正在改写算电协同的投资地图', desc: 'AI从训练转向推理主导，改变了算电协同的底层逻辑。训练看西部绿电成本，推理看东部配电瓶颈——三个PE投资方向拆解。', date: '2026-06-18', readTime: '约 15 分钟阅读', category: '算电协同', tags: ['算电协同', 'AI推理', 'PE投资', '配电网', '边缘计算'] },
 ];
 
 // ── Helper functions ──
