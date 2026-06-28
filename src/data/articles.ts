@@ -33,6 +33,7 @@ export const articles: Article[] = [
   { slug: 'zu-he-tou-zi-yin-zi-tou-zi', title: '组合投资和因子投资对房地产投资策略的启示', desc: '经典投资策略能否应用到房地产投资决策？（2020年文章，内容可能已过时，仅供参考）', date: '2020-07-28', readTime: '约 8 分钟阅读', category: '投资方法论', tags: ['组合投资', '因子投资', '房地产', '历史存档'], series: { name: '投资方法论', order: 2, total: 3 } },
 
   // ── 算电协同 ──
+  { slug: 'suan-li-jin-le-neng-yuan-de-ju', title: '算力进了能源的局', desc: '六月二十五日发布的《新型能源体系建设"十五五"规划》，首次将"算力"作为独立主体写入国家级能源规划。这对算电协同赛道意味着什么？三个逻辑和四个机会。', date: '2026-06-28', readTime: '约 12 分钟阅读', category: '算电协同', tags: ['算电协同', '政策解读', '十五五规划', '算力', '绿电直连'] },
   { slug: 'suan-dian-xie-tong-deep-analysis', title: '算电协同深度分析：当算力遇上电力的结构性机会', desc: '底层逻辑从"电随算动"到"算随电动"，五大落地模式与四条投资主线的全面拆解。', date: '2026-05-29', readTime: '约 12 分钟阅读', category: '算电协同', tags: ['算电协同', '投资分析', '深度分析', '产业链'], series: { name: '算电协同系列', order: 4, total: 5 } },
   { slug: 'suan-dian-xie-tong-AI', title: '算电协同：AI 下半场，电比芯片更稀缺', desc: '算力遇到电力瓶颈，中美两套体制给出了完全不同的应对逻辑。三层投资优先级和六个商业模式拆解。', date: '2026-05-28', readTime: '约 10 分钟阅读', category: '算电协同', tags: ['算电协同', 'AI', '投资分析'], series: { name: '算电协同系列', order: 3, total: 5 } },
   { slug: 'suan-dian-xie-tong-2', title: '算电协同产业链拆解：利润池在哪里？', desc: '上游绿电供给、中游智算基建、下游算力服务——三层的利润分布、竞争格局和卡位策略。', date: '2026-05-18', readTime: '约 10 分钟阅读', category: '算电协同', tags: ['算电协同', '产业链', '投资分析'], series: { name: '算电协同系列', order: 2, total: 4 } },
@@ -100,6 +101,12 @@ export const articles: Article[] = [
 
   // ── 推理改写算电协同 ──
   { slug: 'inference-reshapes-compute-electricity-synergy', title: 'AI推理爆发正在改写算电协同的投资地图', desc: 'AI从训练转向推理主导，改变了算电协同的底层逻辑。训练看西部绿电成本，推理看东部配电瓶颈——三个PE投资方向拆解。', date: '2026-06-18', readTime: '约 15 分钟阅读', category: '算电协同', tags: ['算电协同', 'AI推理', 'PE投资', '配电网', '边缘计算'] },
+
+  // ── AI+能源（新）──
+  { slug: 'AI-neng-yuan-shuang-xiang-fu-neng', title: 'AI用电，账还没算', desc: '五月政策组合拳已至，但"谁买单"还没闭环。从一级市场视角看哪些真受益、哪些只是概念。', date: '2026-06-25', readTime: '约 10 分钟阅读', category: '投资方法论', tags: ['AI+能源', '政策解读', 'PE投资', '绿电直连'] },
+
+  // ── 算电协同（新）──
+  { slug: 'suan-dian-dao-real-or-ppt', title: '100%绿电直连的算电岛，是真实用还是秀肌肉？', desc: '拆解特锐德算电岛技术方案（SST、碳化硅、动态构网），判断哪些是2027年能落地的，哪些是PPT，投资视角评估供应链受益环节。', date: '2026-06-24', readTime: '约 12 分钟阅读', category: '算电协同', tags: ['算电协同', '特锐德', '技术拆解'] },
 ];
 
 // ── Helper functions ──
