@@ -30,14 +30,12 @@ export const articles: Article[] = [
   // ── 投资方法论 ──
   { slug: 'structured-data-tfm-investment-analysis', title: '结构化数据基础模型：AI下半场的6000亿美元叙事', desc: '全球TFM赛道全景扫描，Fundamental $255M A轮到SAP超€1B收购Prior Labs，稳准智能以20亿估值锚定中国唯一入场券。', date: '2026-06-12', readTime: '约 20 分钟阅读', category: '投资方法论', tags: ['AI', '投资分析', '结构化数据', '基础模型', '稳准智能', 'TFM'], series: { name: 'AI 产业投资系列', order: 1, total: 1 } },
   { slug: 'impossible-triangle', title: '不可能铁三角与战略分层定价：华为思路对投资的启示', desc: '质量、成本、低价不可兼得。华为的解法不是三选二，而是市场分层。对基础设施投资的启示。', date: '2026-05-12', readTime: '约 5 分钟阅读', category: '投资方法论', tags: ['投资框架', '定价策略', '华为'], series: { name: '投资方法论', order: 1, total: 3 } },
-  { slug: 'zu-he-tou-zi-yin-zi-tou-zi', title: '组合投资和因子投资对房地产投资策略的启示', desc: '经典投资策略能否应用到房地产投资决策？', date: '2020-07-28', readTime: '约 8 分钟阅读', category: '投资方法论', tags: ['组合投资', '因子投资', '房地产'], series: { name: '投资方法论', order: 2, total: 3 } },
+  { slug: 'zu-he-tou-zi-yin-zi-tou-zi', title: '组合投资和因子投资对房地产投资策略的启示', desc: '经典投资策略能否应用到房地产投资决策？（2020年文章，内容可能已过时，仅供参考）', date: '2020-07-28', readTime: '约 8 分钟阅读', category: '投资方法论', tags: ['组合投资', '因子投资', '房地产', '历史存档'], series: { name: '投资方法论', order: 2, total: 3 } },
 
   // ── 算电协同 ──
-  { slug: '算电协同进入落地期_从算力用户需求倒推投资机会', title: '算电协同进入落地期-从算力用户需求倒推投资机会', desc: '从算力用户的实际需求出发，倒推算电协同的落地路径与投资机会。', date: '2026-06-12', readTime: '约 1 分钟阅读', category: '算电协同', tags: ['算电协同', '算力', '投资分析'], series: { name: '算电协同系列', order: 5, total: 5 } },
-  { slug: '算电协同2026_ai时代的能源基础设施', title: '算电协同2026：AI时代的能源基础设施', desc: '算电协同2026：算电协同作为 AI 基础设施的最新进展与前景展望。', date: '2026-06-12', readTime: '约 1 分钟阅读', category: '算电协同', tags: ['算电协同', 'AI', '基础设施'] },
   { slug: 'suan-dian-xie-tong-deep-analysis', title: '算电协同深度分析：当算力遇上电力的结构性机会', desc: '底层逻辑从"电随算动"到"算随电动"，五大落地模式与四条投资主线的全面拆解。', date: '2026-05-29', readTime: '约 12 分钟阅读', category: '算电协同', tags: ['算电协同', '投资分析', '深度分析', '产业链'], series: { name: '算电协同系列', order: 4, total: 5 } },
   { slug: 'suan-dian-xie-tong-AI', title: '算电协同：AI 下半场，电比芯片更稀缺', desc: '算力遇到电力瓶颈，中美两套体制给出了完全不同的应对逻辑。三层投资优先级和六个商业模式拆解。', date: '2026-05-28', readTime: '约 10 分钟阅读', category: '算电协同', tags: ['算电协同', 'AI', '投资分析'], series: { name: '算电协同系列', order: 3, total: 5 } },
-  { slug: 'suan-dian-xie-tong-2', title: '算电协同产业链拆解：利润池在哪里？', desc: '上游绿电供给、中游智算基建、下游算力服务——三层的利润分布、竞争格局和卡位策略。', date: '2026-05-18', readTime: '约 10 分钟阅读', category: '算电协同', tags: ['算电协同', '产业链', '投资分析'], series: { name: '算电协同系列', order: 2, total: 5 } },
+  { slug: 'suan-dian-xie-tong-2', title: '算电协同产业链拆解：利润池在哪里？', desc: '上游绿电供给、中游智算基建、下游算力服务——三层的利润分布、竞争格局和卡位策略。', date: '2026-05-18', readTime: '约 10 分钟阅读', category: '算电协同', tags: ['算电协同', '产业链', '投资分析'], series: { name: '算电协同系列', order: 2, total: 4 } },
   { slug: 'suan-dian-xie-tong-1', title: '算电协同：为什么这是未来五年确定性很高的投资主题', desc: 'AI 算力集群用电已进入 500MW 级，算力正在成为新的电力需求。', date: '2026-05-15', readTime: '约 8 分钟阅读', category: '算电协同', tags: ['算电协同', '投资主题'], series: { name: '算电协同系列', order: 1, total: 5 } },
 
   // ── 政策解读 ──

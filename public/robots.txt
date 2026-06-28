@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /search/
+Disallow: /blog/category/
+Disallow: /blog/tags/
+
+Sitemap: https://chendaolei-website.pages.dev/sitemap-index.xml
